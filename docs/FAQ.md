@@ -13,29 +13,35 @@ Common questions about LangChain RAG Tutorial.
 
 **Benefits:**
 
-- ✅ Up-to-date information (vs static training data)
-- ✅ Source attribution (cite documents)
-- ✅ Reduced hallucinations (grounded in facts)
+- Up-to-date information (vs static training data)
+- Source attribution (cite documents)
+- Reduced hallucinations (grounded in facts)
 
 ### Which architecture should I choose?
 
-| If you need... | Use this |
-|---|---|
-| Fast, simple Q&A | Simple RAG |
-| Chatbot with memory | Memory RAG |
-| Comprehensive research | Fusion RAG ✨ |
-| Handle ambiguous queries | HyDe |
-| Technical documentation | Contextual RAG ✨ |
-| Best ranking quality | Fusion RAG ✨ |
-| Mixed workload optimization | Adaptive RAG |
-| High accuracy + web fallback | Corrective RAG (CRAG) |
-| Self-correcting system | Self-RAG |
-| Complex multi-step reasoning | Agentic RAG |
-| Analytics/BI queries | SQL RAG ✨ |
-| Knowledge graphs | GraphRAG ✨ |
-| Quality evaluation | RAGAS ✨ |
+| If you need... | Use this | Notebook |
+|---|---|---|
+| Fast, simple Q&A | Simple RAG | [03_simple_rag.ipynb](../notebooks/fundamentals/03_simple_rag.ipynb) |
+| Chatbot with memory | Memory RAG | [04_rag_with_memory.ipynb](../notebooks/advanced_architectures/04_rag_with_memory.ipynb) |
+| Comprehensive research | Branched RAG or Fusion RAG | [05_branched_rag.ipynb](../notebooks/advanced_architectures/05_branched_rag.ipynb) |
+| Ambiguous queries | HyDE | [06_hyde.ipynb](../notebooks/advanced_architectures/06_hyde.ipynb) |
+| Mixed workload / cost optimization | Adaptive RAG | [07_adaptive_rag.ipynb](../notebooks/advanced_architectures/07_adaptive_rag.ipynb) |
+| High accuracy with web fallback | Corrective RAG (CRAG) | [08_corrective_rag.ipynb](../notebooks/advanced_architectures/08_corrective_rag.ipynb) |
+| Self-correcting system | Self-RAG | [09_self_rag.ipynb](../notebooks/advanced_architectures/09_self_rag.ipynb) |
+| Complex multi-step reasoning | Agentic RAG | [10_agentic_rag.ipynb](../notebooks/advanced_architectures/10_agentic_rag.ipynb) |
+| Technical documentation | Contextual RAG | [12_contextual_rag.ipynb](../notebooks/advanced_architectures/12_contextual_rag.ipynb) |
+| Best ranking quality | Fusion RAG | [13_fusion_rag.ipynb](../notebooks/advanced_architectures/13_fusion_rag.ipynb) |
+| Queries with identifiers, codes or jargon | Hybrid search + reranking | [19_hybrid_search_reranking.ipynb](../notebooks/advanced_architectures/19_hybrid_search_reranking.ipynb) |
+| Small chunks lack context, or questions don't match the text's wording | Parent-document / multi-vector retrieval | [20_parent_multivector_retrieval.ipynb](../notebooks/advanced_architectures/20_parent_multivector_retrieval.ipynb) |
+| Analytics/BI queries | SQL RAG | [14_sql_rag.ipynb](../notebooks/advanced_architectures/14_sql_rag.ipynb) |
+| Knowledge graphs, multi-hop | GraphRAG | [15_graphrag.ipynb](../notebooks/advanced_architectures/15_graphrag.ipynb) |
+| Images + text | Multimodal RAG | [17_multimodal_rag.ipynb](../notebooks/advanced_architectures/17_multimodal_rag.ipynb) |
+| Domain-specific retrieval | Fine-tuned embeddings | [18_finetuning_embeddings.ipynb](../notebooks/advanced_architectures/18_finetuning_embeddings.ipynb) |
+| Quality evaluation | RAGAS | [16_evaluation_ragas.ipynb](../notebooks/advanced_architectures/16_evaluation_ragas.ipynb) |
 
-**Rule of thumb:** Start with Simple RAG → Add Contextual for quality → Use specialized for specific needs.
+**Rule of thumb:** start with Simple RAG, add Contextual RAG for quality, then move to a specialized architecture for specific needs.
+
+**Tip:** if retrieval accuracy on domain-specific content stays below about 75%, consider fine-tuning embeddings (notebook 18); the notebook reports gains of 15-25%.
 
 ### Do I need an OpenAI account?
 
@@ -55,12 +61,12 @@ Common questions about LangChain RAG Tutorial.
 
 **Yes, but consider:**
 
-- ✅ Cost monitoring and optimization
-- ✅ Rate limiting and error handling
-- ✅ Caching strategies
-- ✅ Security (API key management)
-- ⚠️ Scale testing
-- ⚠️ Latency requirements
+- Cost monitoring and optimization
+- Rate limiting and error handling
+- Caching strategies
+- Security (API key management)
+- Load testing at your expected scale
+- Whether the architecture meets your latency requirements
 
 See [DEPLOYMENT.md](DEPLOYMENT.md) for production setup.
 
@@ -68,8 +74,7 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for production setup.
 
 ### What Python version do I need?
 
-**Required:** Python 3.9+  
-**Recommended:** Python 3.10 or 3.11
+**Supported:** Python 3.10, 3.11, 3.12 and 3.13. Python 3.9 is not supported: it is end-of-life and LangChain 1.x requires Python 3.10+.
 
 Check version:
 
@@ -126,9 +131,9 @@ See [PERFORMANCE.md](PERFORMANCE.md) for detailed breakdown.
 | Setup | 10 min |
 | Fundamentals (01-03) | 30-40 min |
 | One advanced architecture | 12-30 min |
-| All 12 architectures | 3-4 hours |
+| All advanced notebooks (04-20) | 4-5 hours |
 | With evaluation (RAGAS) | +20 min |
-| **Total** | **4-6 hours** |
+| **Total** | **5-7 hours** |
 
 **First run is slower** (model downloads, vector store creation, Chinook DB).
 
@@ -146,10 +151,10 @@ See [PERFORMANCE.md](PERFORMANCE.md) for detailed breakdown.
 
 **Quick wins:**
 
-1. ✅ Run notebook 02 first (creates vector stores)
-2. ✅ Use cached vector stores (load, don't recreate)
-3. ✅ Reduce k=2 (retrieve fewer documents)
-4. ✅ Use HuggingFace embeddings (local, no API calls)
+1. Run notebook 02 or `make vector-stores` first (creates vector stores)
+2. Use cached vector stores (load, don't recreate)
+3. Reduce k=2 (retrieve fewer documents)
+4. Use HuggingFace embeddings (local, no API calls)
 
 See [PERFORMANCE.md](PERFORMANCE.md) for optimization strategies.
 
@@ -163,7 +168,7 @@ See [PERFORMANCE.md](PERFORMANCE.md) for optimization strategies.
 | **Quality** | Excellent | Good |
 | **Cost** | $0.02/1M tokens | FREE |
 | **Latency** | 100-200ms (API) | 500-1000ms (CPU) |
-| **Offline** | ❌ No | ✅ Yes |
+| **Offline** | No | Yes |
 
 **Recommendation:** OpenAI for production, HuggingFace for demos/development.
 
@@ -198,15 +203,15 @@ See [PERFORMANCE.md](PERFORMANCE.md) for optimization strategies.
 
 ### Can I use my own documents?
 
-**Yes!** Modify `shared/loaders.py`:
+**Yes.** Load them with a LangChain document loader and split them with the shared helpers:
 
 ```python
-from langchain_community.document_loaders import TextLoader, PDFLoader
+from langchain_community.document_loaders import PyPDFLoader, TextLoader
 
 # Load your documents
 loader = TextLoader("path/to/your/docs.txt")
 # or
-loader = PDFLoader("path/to/your/docs.pdf")
+loader = PyPDFLoader("path/to/your/docs.pdf")
 
 docs = loader.load()
 chunks = split_documents(docs)
@@ -216,7 +221,7 @@ Then create vector store as usual.
 
 ## Architecture-Specific
 
-### When should I use Contextual RAG? ✨
+### When should I use Contextual RAG?
 
 **Use Contextual RAG when:**
 
@@ -230,12 +235,12 @@ Then create vector store as usual.
 ```
 Original: "The function returns a list of tokens."
 Contextualized: "Document: LangChain API | Section: Text Splitting | The function returns a list of tokens."
-→ Better semantic matching with 15-30% quality improvement
+Result: better semantic matching with 15-30% quality improvement
 ```
 
 **Benefits:** ~15-30% better retrieval quality with minimal cost overhead.
 
-### When should I use Fusion RAG? ✨
+### When should I use Fusion RAG?
 
 **Use Fusion RAG when:**
 
@@ -253,7 +258,7 @@ Contextualized: "Document: LangChain API | Section: Text Splitting | The functio
 
 **Trade-off:** ~3x slower than Simple RAG, but best ranking quality.
 
-### When should I use SQL RAG? ✨
+### When should I use SQL RAG?
 
 **Use SQL RAG when:**
 
@@ -272,7 +277,7 @@ Contextualized: "Document: LangChain API | Section: Text Splitting | The functio
 
 **Benefits:** Perfect accuracy for structured data queries. Includes Chinook sample database.
 
-### When should I use GraphRAG? ✨
+### When should I use GraphRAG?
 
 **Use GraphRAG when:**
 
@@ -327,56 +332,13 @@ Then embeds hypothetical answer for better retrieval.
 4. **Repeat**: Until answer found
 
 **Each iteration = 1-2 LLM calls**
-**Total**: 5-10 LLM calls → 20-40s latency
+**Total**: 5-10 LLM calls, 20-40s latency
 
 **Trade-off**: Slow but autonomous multi-step reasoning.
 
 ## Troubleshooting
 
-### "ModuleNotFoundError: No module named 'langchain'"
-
-**Solution:**
-
-```bash
-# Activate venv
-source venv/bin/activate
-
-# Verify
-which python  # Should point to venv/bin/python
-
-# Reinstall
-pip install langchain
-```
-
-See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for more.
-
-### "API key not found"
-
-**Solutions:**
-
-1. Create `.env` file in project root
-2. Add: `OPENAI_API_KEY=sk-proj-...`
-3. Restart Jupyter kernel
-4. Verify: `cat .env`
-
-### "Vector store not found"
-
-**Solution:** Run notebook 02 first
-
-```bash
-jupyter notebook notebooks/fundamentals/02_embeddings_comparison.ipynb
-```
-
-This creates vector stores in `data/vector_stores/`.
-
-### Notebook kernel keeps dying
-
-**Solutions:**
-
-1. Reduce RAM usage (lower k, smaller chunks)
-2. Restart kernel between notebooks
-3. Check system resources (htop/Activity Monitor)
-4. Increase Jupyter memory limit
+Installation, API key, vector store and Jupyter problems are covered in [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
 ## Contributing
 
@@ -384,11 +346,11 @@ This creates vector stores in `data/vector_stores/`.
 
 **Ways to contribute:**
 
-- 🐛 Report bugs
-- ✨ Suggest features
-- 📝 Improve documentation
-- 💻 Submit pull requests
-- 🎓 Share use cases
+- Report bugs
+- Suggest features
+- Improve documentation
+- Submit pull requests
+- Share use cases
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
@@ -396,7 +358,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 **Yes!** Follow this process:
 
-1. Create notebook: `notebooks/advanced_architectures/17_your_architecture.ipynb`
+1. Create notebook: `notebooks/advanced_architectures/19_your_architecture.ipynb`
 2. Add prompts to `shared/prompts.py`
 3. Update comparison in `11_comparison.ipynb`
 4. Document in `notebooks/advanced_architectures/README.md`
@@ -409,14 +371,14 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 **Yes!** MIT License allows:
 
-- ✅ Commercial use
-- ✅ Modification
-- ✅ Distribution
-- ✅ Private use
+- Commercial use
+- Modification
+- Distribution
+- Private use
 
 **Requirements:**
 
-- Include LICENSE file
+- Keep the copyright and license notice
 - Attribute original authors
 
 ### Can I fork and modify?
@@ -425,18 +387,17 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 **Please:**
 
-- Star the original repo
-- Link back to original
+- Link back to the original repository
 - Share improvements (optional but appreciated)
 
 ## Getting Help
 
 Still have questions?
 
-1. 📖 **Check docs**: [docs/](.)
-2. 🔍 **Search issues**: [GitHub Issues](https://github.com/gianlucamazza/langchain-rag-tutorial/issues)
-3. 💬 **Ask community**: [Discussions](https://github.com/gianlucamazza/langchain-rag-tutorial/discussions)
-4. 🐛 **Report bug**: [New Issue](https://github.com/gianlucamazza/langchain-rag-tutorial/issues/new)
+1. **Check docs**: [docs/](.)
+2. **Search issues**: [GitHub Issues](https://github.com/gianlucamazza/langchain-rag-tutorial/issues)
+3. **Ask community**: [Discussions](https://github.com/gianlucamazza/langchain-rag-tutorial/discussions)
+4. **Report bug**: [New Issue](https://github.com/gianlucamazza/langchain-rag-tutorial/issues/new)
 
 ## See Also
 
