@@ -100,7 +100,9 @@ langchain-rag-tutorial/
 **Pattern**: Documents -> Summarize -> Context-Augment Chunks -> Embed -> Query -> Retrieve -> Generate
 **Use Case**: Technical docs, code documentation
 **Innovation**: Anthropic's technique - prepend document context to each chunk
-**Benefits**: 15-30% better retrieval quality with minimal overhead
+**Benefits**: can improve retrieval when isolated chunks lack document context
+(indexing-time LLM cost). Any lift is corpus- and query-dependent; this tutorial
+does not report a measured gain.
 **Full recipe**: contextual embeddings + contextual BM25 + reranking (section 11)
 
 ### 10. Fusion RAG (complexity 3/5)

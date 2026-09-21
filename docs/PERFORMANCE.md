@@ -24,8 +24,14 @@ Benchmarks and performance expectations for LangChain RAG Tutorial.
 | 14_sql_rag | 5-8 min | 1.5 min | Chinook DB setup + SQL generation |
 | 15_graphrag | 10-15 min | 3 min | Entity extraction + graph construction |
 | 16_evaluation_ragas | 15-20 min | 5 min | Evaluation dataset + metrics computation |
+| 17_multimodal_rag | 25-30 min | 5-8 min | Vision API calls + optional OCR / PDF image extraction |
+| 18_finetuning_embeddings | 30-35 min | 8-12 min | Local embedding fine-tune + baseline comparison |
+| 19_hybrid_search_reranking | 15-20 min | 3-5 min | Reranker download (~90 MB) + BM25 / hybrid comparison |
+| 20_parent_multivector_retrieval | 15-20 min | 3-5 min | Parent index + LLM summaries / hypothetical questions |
 
-**Key Insight:** First run includes model downloads, vector store creation, and database setup. Subsequent runs use cached data.
+Times for 17-20 are order-of-magnitude estimates from the notebook durations, not
+timed runs. First run includes model downloads, vector store creation, and
+database setup. Subsequent runs use cached data.
 
 ## Query Latency
 
@@ -145,7 +151,7 @@ embeddings = OpenAIEmbeddings(model=OPENAI_EMBEDDING_MODEL)
 vectorstore = FAISS.from_documents(chunks, embeddings)
 save_vector_store(vectorstore, OPENAI_VECTOR_STORE_PATH)
 
-# Reuse everywhere (notebooks 03-18)
+# Reuse everywhere (notebooks 03-20)
 vectorstore = require_vector_store(OPENAI_VECTOR_STORE_PATH, embeddings)
 ```
 
@@ -293,7 +299,8 @@ Quality (1-10)  |                    * Agentic RAG (9.5, 30s)
                          Latency (seconds)
 ```
 
-**Legend:** *SQL RAG quality is "Perfect" for structured data queries, "N/A" for unstructured
+**Legend:** *SQL RAG can look strong on structured queries when the generated SQL
+is correct; it is not a guarantee, and it is N/A for unstructured text.
 
 **Key Insight:** a 1.5x quality improvement costs about 15x latency. The specialized architectures (Contextual, Fusion, SQL, GraphRAG) offer better quality-speed trade-offs for their specific use cases.
 

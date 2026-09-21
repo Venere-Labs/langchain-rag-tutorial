@@ -41,7 +41,9 @@ Common questions about LangChain RAG Tutorial.
 
 **Rule of thumb:** start with Simple RAG, add Contextual RAG for quality, then move to a specialized architecture for specific needs.
 
-**Tip:** if retrieval accuracy on domain-specific content stays below about 75%, consider fine-tuning embeddings (notebook 18); the notebook reports gains of 15-25%.
+**Tip:** if retrieval on domain-specific content stays weak, consider fine-tuning
+embeddings (notebook 18). Any lift is workload-dependent; the notebook walks through
+a comparison and does not report a measured production gain.
 
 ### Do I need an OpenAI account?
 
@@ -59,16 +61,18 @@ Common questions about LangChain RAG Tutorial.
 
 ### Can I use this in production?
 
-**Yes, but consider:**
+**This is a tutorial, not a production product.** The FastAPI, Streamlit and
+Lambda templates are starting points you would still need to harden. Before any
+real deployment, plan for at least:
 
-- Cost monitoring and optimization
-- Rate limiting and error handling
-- Caching strategies
-- Security (API key management)
+- Authentication, authorization, rate limiting and HTTPS
+- Cost monitoring, error handling and caching
+- Secrets in a secrets manager (not a committed `.env`)
 - Load testing at your expected scale
-- Whether the architecture meets your latency requirements
+- Confirming the architecture meets your latency and quality requirements
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for production setup.
+See [DEPLOYMENT.md](DEPLOYMENT.md) for practices to apply. Nothing here is a
+production SLA or a claim that the templates are ready to ship as-is.
 
 ## Installation & Setup
 
@@ -235,10 +239,12 @@ Then create vector store as usual.
 ```
 Original: "The function returns a list of tokens."
 Contextualized: "Document: LangChain API | Section: Text Splitting | The function returns a list of tokens."
-Result: better semantic matching with 15-30% quality improvement
+Result: better semantic matching for chunks that otherwise lack document context
 ```
 
-**Benefits:** ~15-30% better retrieval quality with minimal cost overhead.
+**Benefits:** can help when isolated chunks miss surrounding context, at the cost
+of an indexing-time LLM pass. Any quality lift depends on the corpus and query
+set; this tutorial does not report a measured gain.
 
 ### When should I use Fusion RAG?
 
@@ -275,7 +281,10 @@ Result: better semantic matching with 15-30% quality improvement
 4. Execute safely (read-only)
 5. Interpret results with LLM
 
-**Benefits:** Perfect accuracy for structured data queries. Includes Chinook sample database.
+**Benefits:** well-suited to structured data when the generated SQL is valid and
+the schema is in scope. The model can still write incorrect or incomplete
+queries; notebook 14 adds validation, a read-only path and the Chinook sample
+database so you can inspect failures. There is no accuracy guarantee.
 
 ### When should I use GraphRAG?
 
@@ -358,7 +367,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 **Yes!** Follow this process:
 
-1. Create notebook: `notebooks/advanced_architectures/19_your_architecture.ipynb`
+1. Create notebook: `notebooks/advanced_architectures/21_your_architecture.ipynb`
 2. Add prompts to `shared/prompts.py`
 3. Update comparison in `11_comparison.ipynb`
 4. Document in `notebooks/advanced_architectures/README.md`

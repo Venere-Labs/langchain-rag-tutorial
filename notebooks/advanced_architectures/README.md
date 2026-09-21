@@ -327,7 +327,7 @@ Enhances document chunks by prepending them with document-level context, improvi
 - Document summarization with LLM
 - Chunk-specific contextualization
 - Context-augmented embeddings
-- ~15-30% better retrieval quality
+- Can help isolated chunks that lack document context (no measured gain claimed here)
 - Full contextual retrieval (section 11): contextual embeddings + contextual BM25 + reranking, with an ablation of 4 configurations
 
 **Example:**

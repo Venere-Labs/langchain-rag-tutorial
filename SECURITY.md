@@ -4,6 +4,7 @@
 
 | Version | Supported |
 | ------- | --------- |
+| 1.4.x   | Yes       |
 | 1.3.x   | Yes       |
 | 1.2.x   | Yes       |
 | < 1.2   | No        |
@@ -26,9 +27,13 @@ released.
 
 ## Response Time
 
-- **Initial response**: within 48 hours
-- **Fix timeline**: critical issues within 7 days, others within 30 days
-- **Disclosure**: coordinated disclosure after the fix is released
+There is **no committed SLA**. The project is maintained in spare time; the notes
+below are aspirational only and are not a guarantee of acknowledgement, fix, or
+disclosure timing.
+
+- We aim to acknowledge reports when we can
+- Fixes are prioritized by severity and available time
+- Disclosure is coordinated after a fix is released, when practical
 
 ## Security Best Practices
 

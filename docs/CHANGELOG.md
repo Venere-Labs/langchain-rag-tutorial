@@ -5,6 +5,16 @@ All notable changes to LangChain RAG Tutorial will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Documentation honesty: `SECURITY.md` lists 1.4.x as supported and drops
+  non-binding 48h/7d/30d response SLAs (aspirational only, no commitment).
+- CHANGELOG "Under Consideration" no longer lists hybrid search and re-ranking
+  (shipped in 1.4.0).
+- FAQ no longer claims perfect SQL accuracy or unmeasured percentage gains.
+
 ## [1.4.0] - 2026-09-21
 
 Hybrid search, reranking, and parent-document / multi-vector retrieval.
@@ -309,7 +319,8 @@ Migration to LangChain 1.x and modernized tooling.
 - **Project Structure**: Now includes templates/, tests/, .github/ directories
 - **README.md**: Updated to mention Docker support and production templates
 - **Total Notebooks**: 16 -> 18 (+2)
-- **Project Completeness**: Development -> Production-ready
+- **Project Completeness**: Development -> Docker and deployment templates
+  (starting points for the tutorial, not a production guarantee)
 
 ### Improved
 
@@ -506,8 +517,8 @@ Migration to LangChain 1.x and modernized tooling.
 
 - Ollama local LLM integration
 - Azure OpenAI, AWS Bedrock and Google Vertex AI support
-- Hybrid search (keyword + semantic)
-- Re-ranking strategies
+
+Hybrid search (keyword + semantic) and re-ranking shipped in [1.4.0](#140---2026-09-21).
 
 ---
 
