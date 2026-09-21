@@ -26,7 +26,7 @@ os.environ["USER_AGENT"] = USER_AGENT
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 if not OPENAI_API_KEY:
-    print("⚠️  WARNING: OPENAI_API_KEY not found in environment")
+    print("WARNING: OPENAI_API_KEY not found in environment")
     print("  Please create .env file with: OPENAI_API_KEY=your-key-here")
 
 # Set in environment for LangChain
@@ -141,12 +141,12 @@ def verify_api_key() -> bool:
         bool: True if key is loaded, False otherwise
     """
     if OPENAI_API_KEY:
-        print("✓ OpenAI API Key: LOADED")
+        print("OpenAI API Key: LOADED")
         print(f"  Preview: {OPENAI_API_KEY[:7]}...{OPENAI_API_KEY[-4:]}")
         return True
     else:
-        print("✗ OpenAI API Key: NOT LOADED")
-        print("\n⚠️  Setup instructions:")
+        print("OpenAI API Key: NOT LOADED")
+        print("\nSetup instructions:")
         print("  1. Create .env file in project root")
         print("  2. Add: OPENAI_API_KEY=sk-proj-...")
         print("  3. Get key from: https://platform.openai.com/api-keys")

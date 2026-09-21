@@ -44,7 +44,7 @@ def load_langchain_docs(
         docs = loader.load()
 
         if verbose:
-            print(f"✓ Loaded {len(docs)} documents")
+            print(f"Loaded {len(docs)} documents")
 
         # Add custom metadata
         if add_metadata:
@@ -55,13 +55,13 @@ def load_langchain_docs(
                 doc.metadata["domain"] = "langchain"
 
             if verbose:
-                print("✓ Added custom metadata to all documents")
+                print("Added custom metadata to all documents")
 
         return docs
 
     except Exception as e:
         if verbose:
-            print(f"✗ Error loading documents: {e}")
+            print(f"Error loading documents: {e}")
         raise
 
 
@@ -100,7 +100,7 @@ def split_documents(
         chunks = text_splitter.split_documents(docs)
 
         if verbose:
-            print(f"✓ Created {len(chunks)} chunks")
+            print(f"Created {len(chunks)} chunks")
 
             # Show sample chunk info
             if chunks:
@@ -114,7 +114,7 @@ def split_documents(
 
     except Exception as e:
         if verbose:
-            print(f"✗ Error splitting documents: {e}")
+            print(f"Error splitting documents: {e}")
         raise
 
 
@@ -164,8 +164,8 @@ def compare_splitting_strategies(
                 f"{result['num_chunks']:<10}"
             )
 
-        print("\n💡 Larger chunks = more context, fewer chunks")
-        print("💡 Smaller chunks = more precise, more chunks")
+        print("\nLarger chunks = more context, fewer chunks")
+        print("Smaller chunks = more precise, more chunks")
 
     return results
 

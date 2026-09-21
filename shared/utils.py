@@ -78,11 +78,11 @@ def load_vector_store(
             allow_dangerous_deserialization=True,  # Required for pickle files
         )
         if verbose:
-            print(f"✓ Loaded vector store from {path}")
+            print(f"Loaded vector store from {path}")
         return vectorstore
     except Exception as e:
         if verbose:
-            print(f"✗ Error loading vector store from {path}: {e}")
+            print(f"Error loading vector store from {path}: {e}")
         return None
 
 
@@ -100,7 +100,7 @@ def require_vector_store(path: str | Path, embeddings: Embeddings) -> FAISS:
             f"Vector store not found at {path}. Build it first with "
             "`make vector-stores` or by running notebook 02_embeddings_comparison."
         )
-    print(f"✓ Loaded vector store from {path}")
+    print(f"Loaded vector store from {path}")
     return vectorstore
 
 
@@ -122,10 +122,10 @@ def save_vector_store(vectorstore: FAISS, path: str | Path, verbose: bool = True
 
         vectorstore.save_local(str(path))
         if verbose:
-            print(f"✓ Saved vector store to {path}")
+            print(f"Saved vector store to {path}")
     except Exception as e:
         if verbose:
-            print(f"✗ Error saving vector store to {path}: {e}")
+            print(f"Error saving vector store to {path}: {e}")
         raise
 
 

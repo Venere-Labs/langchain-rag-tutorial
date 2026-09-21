@@ -28,7 +28,6 @@ from shared.prompts import RAG_PROMPT_TEMPLATE
 # Page configuration
 st.set_page_config(
     page_title="LangChain RAG Tutorial",
-    page_icon="🦜",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -74,11 +73,11 @@ def main():
     """Main Streamlit application"""
 
     # Header
-    st.markdown('<div class="main-header">🦜 LangChain RAG Tutorial</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">LangChain RAG Tutorial</div>', unsafe_allow_html=True)
 
     # Sidebar
     with st.sidebar:
-        st.header("⚙️ Configuration")
+        st.header("Configuration")
 
         # Architecture selection
         architecture = st.selectbox(
@@ -109,7 +108,7 @@ def main():
         st.divider()
 
         # Info
-        st.subheader("📚 About")
+        st.subheader("About")
         st.markdown("""
         This is a production-ready RAG application built with:
         - **LangChain** for RAG pipelines
@@ -121,18 +120,18 @@ def main():
         """)
 
     # Initialize RAG
-    with st.spinner("🔄 Loading RAG components..."):
+    with st.spinner("Loading RAG components..."):
         vectorstore, llm = initialize_rag()
 
     if vectorstore is None or llm is None:
-        st.error("❌ Failed to load RAG components. Check your configuration.")
+        st.error("Failed to load RAG components. Check your configuration.")
         return
 
     # Main content
     col1, col2 = st.columns([2, 1])
 
     with col1:
-        st.subheader("💬 Ask a Question")
+        st.subheader("Ask a Question")
 
         # Query input
         query = st.text_area(
@@ -143,10 +142,10 @@ def main():
         )
 
         # Submit button
-        submit = st.button("🚀 Get Answer", type="primary", use_container_width=True)
+        submit = st.button("Get Answer", type="primary", use_container_width=True)
 
     with col2:
-        st.subheader("📊 Statistics")
+        st.subheader("Statistics")
 
         # Placeholder for statistics
         stat_col1, stat_col2 = st.columns(2)
@@ -157,7 +156,7 @@ def main():
 
     # Process query
     if submit and query:
-        with st.spinner("🤔 Thinking..."):
+        with st.spinner("Thinking..."):
             start_time = time.time()
 
             try:
@@ -187,13 +186,13 @@ def main():
                 # Display results
                 st.divider()
 
-                st.subheader("✅ Answer")
+                st.subheader("Answer")
                 st.markdown(answer)
 
                 st.divider()
 
                 # Source documents
-                with st.expander("📄 Source Documents", expanded=False):
+                with st.expander("Source Documents", expanded=False):
                     for i, doc in enumerate(docs, 1):
                         st.markdown(
                             f"**Document {i}** (Source: {doc.metadata.get('source', 'unknown')})"
@@ -204,24 +203,24 @@ def main():
                 # Metrics
                 col1, col2, col3 = st.columns(3)
                 with col1:
-                    st.metric("⏱️ Latency", f"{latency:.0f} ms")
+                    st.metric("Latency", f"{latency:.0f} ms")
                 with col2:
-                    st.metric("📚 Sources", len(docs))
+                    st.metric("Sources", len(docs))
                 with col3:
-                    st.metric("🎯 Architecture", architecture.split()[0])
+                    st.metric("Architecture", architecture.split()[0])
 
                 # Success message
-                st.success("✅ Query completed successfully!")
+                st.success("Query completed successfully!")
 
             except Exception as e:
-                st.error(f"❌ Error: {e}")
+                st.error(f"Error: {e}")
 
     elif submit and not query:
-        st.warning("⚠️ Please enter a question.")
+        st.warning("Please enter a question.")
 
     # Sample queries
     st.divider()
-    st.subheader("💡 Try These Sample Queries")
+    st.subheader("Try These Sample Queries")
 
     sample_queries = [
         "What is RAG and how does it work?",
@@ -233,7 +232,7 @@ def main():
 
     cols = st.columns(len(sample_queries))
     for i, col in enumerate(cols):
-        if col.button(f"📝 Query {i + 1}", use_container_width=True):
+        if col.button(f"Query {i + 1}", use_container_width=True):
             st.session_state.query_input = sample_queries[i]
             st.rerun()
 

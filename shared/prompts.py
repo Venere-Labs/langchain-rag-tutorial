@@ -771,4 +771,4 @@ if __name__ == "__main__":
     print("\n3. Complexity Classifier:")
     print(COMPLEXITY_CLASSIFIER_PROMPT.format(query="What is the capital of France?"))
 
-    print("\n✓ All prompts loaded successfully")
+    print("\nAll prompts loaded successfully")
