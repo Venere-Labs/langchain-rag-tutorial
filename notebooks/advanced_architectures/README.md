@@ -1,6 +1,6 @@
 # Advanced RAG Architectures
 
-This directory contains notebooks 04-18: **12 advanced RAG architectures**, each suited to different use cases and requirements, plus a comparison benchmark, a RAGAS evaluation framework and an embedding fine-tuning guide.
+This directory contains notebooks 04-20: **14 advanced RAG architectures**, each suited to different use cases and requirements, plus a comparison benchmark, a RAGAS evaluation framework and an embedding fine-tuning guide.
 
 ## Prerequisites
 
@@ -33,6 +33,8 @@ These provide the baseline components (vector stores, embeddings, retrievers) us
 | **16** | RAGAS Evaluation | - | Quality assessment | Comprehensive RAG metrics framework |
 | **17** | Multimodal RAG | 4/5 | Images + text, scanned documents | Vision model + OCR (Tesseract, Poppler) |
 | **18** | Fine-tuning Embeddings | 4/5 | Domain-specific retrieval | Custom sentence-transformers models |
+| **19** | Hybrid Search + Reranking | 3/5 | Identifiers and jargon in queries | BM25 + dense fusion (RRF) + cross-encoder reranker |
+| **20** | Parent-Document and Multi-Vector | 3/5 | Chunk-size dilemma, vocabulary mismatch | Search small chunks or summaries/questions, return full context |
 
 ---
 
@@ -326,6 +328,7 @@ Enhances document chunks by prepending them with document-level context, improvi
 - Chunk-specific contextualization
 - Context-augmented embeddings
 - ~15-30% better retrieval quality
+- Full contextual retrieval (section 11): contextual embeddings + contextual BM25 + reranking, with an ablation of 4 configurations
 
 **Example:**
 
@@ -511,6 +514,79 @@ Scores:
 
 ---
 
+### 19_hybrid_search_reranking.ipynb
+
+**Hybrid Search + Cross-Encoder Reranking**
+
+Combines keyword retrieval (BM25) with dense retrieval (FAISS) through weighted Reciprocal Rank Fusion, then reranks the fused candidates with a local cross-encoder before they reach the LLM.
+
+**When to Use:**
+
+- Queries that mix natural language with identifiers (API names, error codes, SKUs)
+- Corpora with domain jargon the embedding model has not seen
+- When precision of the top few chunks matters more than a few hundred ms of latency
+
+**Key Components:**
+
+- `BM25Retriever` + FAISS combined with `EnsembleRetriever` (weighted RRF)
+- `ContextualCompressionRetriever` + `CrossEncoderReranker` (`cross-encoder/ms-marco-MiniLM-L-6-v2`, set with `DEFAULT_RERANKER_MODEL`)
+- Dense / BM25 / Hybrid / Hybrid+Rerank comparison with Hit@4 and MRR@4 on exact-identifier vs paraphrased queries
+- `bm25_weight` sweep and inspection of reranker scores
+- Reusable builders in `shared/retrievers.py`
+
+**Example:**
+
+```
+Query: "What does max_retries control?"
+
+Dense:  semantically close chunks, exact token often missed
+BM25:   chunks containing "max_retries"
+Hybrid: RRF merges both rankings (~20 candidates)
+Rerank: cross-encoder scores each (query, chunk) pair -> top 4
+```
+
+No extra API key is needed; the first run downloads the reranker model (~90 MB).
+
+**Duration:** ~15 minutes
+
+---
+
+### 20_parent_multivector_retrieval.ipynb
+
+**Parent-Document and Multi-Vector Retrieval**
+
+Separates what is searched from what is returned to the LLM: a vector store holds the searchable vectors, a docstore holds the text the LLM reads.
+
+**When to Use:**
+
+- Answers need more context than a small, precisely matching chunk provides
+- Users ask questions in words the text does not use
+- Dense chunks (code, tables) that embed poorly as raw text
+
+**Key Components:**
+
+- `ParentDocumentRetriever`: 400-char child chunks are embedded, 2000-char parents are returned
+- `MultiVectorRetriever`: indexes an LLM summary and 3 hypothetical questions per chunk (`with_structured_output`), returns the original chunk
+- Generated representations cached in `data/cache/`
+- Comparison with the baseline on Hit@4, MRR@4 and context size
+
+**Example:**
+
+```
+Chunk: "RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200) ..."
+
+Indexed representations:
+- Summary: "Configuring chunk size and overlap for text splitting"
+- Question: "How do I control the size of text chunks?"
+- Question: "What does chunk_overlap do?"
+
+-> A question-shaped query matches a question-shaped vector; the LLM gets the original chunk
+```
+
+**Duration:** ~15 minutes
+
+---
+
 ## Comparison Matrix
 
 | Architecture | Latency | Cost | Accuracy | Complexity | Best For |
@@ -521,6 +597,8 @@ Scores:
 | HyDe | Medium (4-6s) | Medium | Very Good | 3/5 | Ambiguous queries |
 | Contextual RAG | Fast (2-3s) | Low | Very Good | 3/5 | Technical docs |
 | Fusion RAG | Medium (5-8s) | Medium | Excellent | 3/5 | Research |
+| Hybrid + Rerank | Fast (2-4s) | Low | Very Good | 3/5 | Identifiers, jargon |
+| Parent / Multi-Vector | Fast (2-3s) | Low*** | Very Good | 3/5 | Chunk-size trade-offs |
 | Adaptive RAG | Variable | Optimized | Very Good | 4/5 | Mixed workloads |
 | SQL RAG | Fast (2-5s) | Low-Med | Perfect* | 4/5 | Analytics |
 | CRAG | Slow (10-15s) | High | Excellent | 4/5 | High-accuracy |
@@ -528,7 +606,7 @@ Scores:
 | GraphRAG | Medium (3-8s) | High | Excellent** | 5/5 | Knowledge graphs |
 | Agentic RAG | Very Slow (20-40s) | Very High | Excellent | 5/5 | Complex reasoning |
 
-*Perfect for structured data queries | **Excellent for relationship queries
+*Perfect for structured data queries | **Excellent for relationship queries | ***Multi-vector adds LLM calls at indexing time
 
 ---
 
@@ -565,6 +643,10 @@ All dependencies are in the project `requirements.txt`. Architecture-specific re
 - **Multimodal RAG (17)**: `pillow`, `pytesseract`, `pdf2image`, plus the Tesseract and Poppler
   system packages
 - **Fine-tuning (18)**: `sentence-transformers`, `accelerate`
+- **Hybrid Search + Reranking (19)** and section 11 of **Contextual RAG (12)**: `rank-bm25`,
+  `langchain-classic`, `sentence-transformers`; the reranker model (`cross-encoder/ms-marco-MiniLM-L-6-v2`,
+  ~90 MB) is downloaded on first run
+- **Parent-Document and Multi-Vector (20)**: `langchain-classic`
 
 ---
 
@@ -580,25 +662,27 @@ All dependencies are in the project `requirements.txt`. Architecture-specific re
 
 4. 12_contextual_rag.ipynb  <- Context-augmented chunks
 5. 13_fusion_rag.ipynb  <- Best ranking quality
-6. 07_adaptive_rag.ipynb
-7. 08_corrective_rag.ipynb
+6. 19_hybrid_search_reranking.ipynb  <- BM25 + dense + reranker
+7. 20_parent_multivector_retrieval.ipynb  <- Decouple search from context
+8. 07_adaptive_rag.ipynb
+9. 08_corrective_rag.ipynb
 
 **Advanced Path**:
 
-8. 14_sql_rag.ipynb  <- Natural language to SQL
-9. 09_self_rag.ipynb
-10. 10_agentic_rag.ipynb
+10. 14_sql_rag.ipynb  <- Natural language to SQL
+11. 09_self_rag.ipynb
+12. 10_agentic_rag.ipynb
 
 **Expert Path**:
 
-11. 15_graphrag.ipynb (graph-based reasoning)
-12. 17_multimodal_rag.ipynb (images + text)
-13. 18_finetuning_embeddings.ipynb (custom embeddings)
+13. 15_graphrag.ipynb (graph-based reasoning)
+14. 17_multimodal_rag.ipynb (images + text)
+15. 18_finetuning_embeddings.ipynb (custom embeddings)
 
 **Analysis & Evaluation**:
 
-14. 11_comparison.ipynb (benchmark of the architectures)
-15. 16_evaluation_ragas.ipynb (quality metrics)
+16. 11_comparison.ipynb (benchmark of the architectures)
+17. 16_evaluation_ragas.ipynb (quality metrics)
 
 ---
 
@@ -643,6 +727,7 @@ See each notebook's "Production Optimizations" section for specific guidance.
 **Newer Architectures:**
 - [Contextual Retrieval (Anthropic)](https://www.anthropic.com/news/contextual-retrieval) - Context-augmented chunking
 - [RAG-Fusion Paper](https://arxiv.org/abs/2402.03367) - Reciprocal Rank Fusion
+- [Reciprocal Rank Fusion (Cormack et al.)](https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf) - Hybrid search fusion
 - [GraphRAG (Microsoft Research)](https://www.microsoft.com/en-us/research/blog/graphrag-unlocking-llm-discovery-on-narrative-private-data/) - Graph-based RAG
 - [RAGAS Framework](https://docs.ragas.io/) - RAG evaluation metrics
 - [Text-to-SQL Survey](https://arxiv.org/abs/2208.13629) - Natural language to SQL

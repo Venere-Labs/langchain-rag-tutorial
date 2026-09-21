@@ -402,6 +402,36 @@ Context:
 
 
 # ============================================================================
+# MULTI-VECTOR RETRIEVAL PROMPTS
+# ============================================================================
+
+CHUNK_SUMMARY_PROMPT = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            """You are a helpful AI assistant. Summarize the text below so that the summary can be used
+to retrieve it with a search query. Mention the concrete APIs, classes, parameters and concepts it covers.
+
+Keep the summary to 2-3 sentences. Output only the summary.""",
+        ),
+        ("user", "{chunk}"),
+    ]
+)
+
+
+HYPOTHETICAL_QUESTIONS_PROMPT = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            """You are a helpful AI assistant. Generate {num_questions} distinct questions a developer
+could ask that the text below answers. Make each question self-contained and specific.""",
+        ),
+        ("user", "{chunk}"),
+    ]
+)
+
+
+# ============================================================================
 # SQL RAG PROMPTS
 # ============================================================================
 
@@ -696,6 +726,9 @@ def get_prompt_by_name(name: str) -> ChatPromptTemplate | PromptTemplate:
         # Fusion RAG
         "fusion_query": FUSION_QUERY_GENERATION_PROMPT,
         "fusion_rag": FUSION_RAG_ANSWER_PROMPT,
+        # Multi-vector retrieval
+        "chunk_summary": CHUNK_SUMMARY_PROMPT,
+        "hypothetical_questions": HYPOTHETICAL_QUESTIONS_PROMPT,
         # SQL RAG
         "sql_schema": SQL_SCHEMA_SUMMARY_PROMPT,
         "text_to_sql": TEXT_TO_SQL_PROMPT,

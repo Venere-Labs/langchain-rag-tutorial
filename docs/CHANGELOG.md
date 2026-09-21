@@ -5,6 +5,51 @@ All notable changes to LangChain RAG Tutorial will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-09-21
+
+Hybrid search, reranking, and parent-document / multi-vector retrieval.
+
+### Added
+
+- **Notebook 19, Hybrid Search + Reranking** (complexity 3/5): BM25 and dense (FAISS) retrieval
+  fused with weighted Reciprocal Rank Fusion (`EnsembleRetriever`), then reranked by a local
+  cross-encoder (`cross-encoder/ms-marco-MiniLM-L-6-v2`) through `ContextualCompressionRetriever` +
+  `CrossEncoderReranker`. Compares Dense, BM25, Hybrid and Hybrid + Rerank with Hit@4 and MRR@4
+  on a small labeled query set (exact-identifier vs paraphrased queries), sweeps `bm25_weight`
+  and inspects reranker scores. Needs no extra API key; the first run downloads the reranker
+  model (~90 MB).
+- **Notebook 20, Parent-Document and Multi-Vector Retrieval** (complexity 3/5):
+  `ParentDocumentRetriever` (400-character children, 2000-character parents) and
+  `MultiVectorRetriever` indexing an LLM summary and 3 hypothetical questions per chunk
+  (`with_structured_output`), cached in `data/cache/`. Compared with the baseline on Hit@4,
+  MRR@4 and context size.
+- **Notebook 12, section 11 "Full Contextual Retrieval: Contextual BM25 + Reranking"**:
+  Anthropic's full recipe (contextual embeddings + contextual BM25 + reranking) with an ablation
+  of 4 configurations.
+- **`shared/retrievers.py`**: `bm25_tokenize()` (lowercases and splits on punctuation, so
+  identifiers such as `max_retries=2,` match; LangChain's BM25 default splits on whitespace only),
+  `build_bm25_retriever()`, `build_hybrid_retriever()` (raises
+  `ValueError` if `bm25_weight` is not in [0, 1]; returns up to `2 * k` unique documents) and
+  `build_reranking_retriever()`, all re-exported from `shared`.
+- **`DEFAULT_RERANKER_MODEL`** in `shared/config.py` (default `cross-encoder/ms-marco-MiniLM-L-6-v2`,
+  env-overridable), also reported by `get_project_info()` as `reranker_model`.
+- **Prompts** `CHUNK_SUMMARY_PROMPT` (variable `chunk`) and `HYPOTHETICAL_QUESTIONS_PROMPT`
+  (variables `chunk`, `num_questions`), exported from `shared` and registered in
+  `get_prompt_by_name()` as `"chunk_summary"` and `"hypothetical_questions"`.
+- **Dependencies**: `langchain-classic>=1.0.0` (in LangChain 1.x, `EnsembleRetriever`, the
+  parent-document and multi-vector retrievers and the rerankers live there) and
+  `rank-bm25>=0.2.2`.
+- `tests/test_retrievers.py`, offline (fake embeddings and a fake cross-encoder).
+
+### Changed
+
+- `sentence-transformers` is now also used for cross-encoder reranking (notebooks 12 and 19),
+  not only for embedding fine-tuning (notebook 18).
+- Documentation, the index notebook and the architecture selection guides cover notebooks 19 and
+  20: 21 notebooks (index plus 01-20) and 15 RAG architectures.
+
+---
+
 ## [1.3.0] - 2026-09-21
 
 Migration to LangChain 1.x and modernized tooling.

@@ -20,7 +20,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
-from shared import format_docs, require_vector_store
+from shared import __version__, format_docs, require_vector_store
 from shared.config import (
     DEFAULT_MODEL,
     DEFAULT_TEMPERATURE,
@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 app = FastAPI(
     title="LangChain RAG API",
     description="Production-ready RAG API with LangChain",
-    version="1.2.0",
+    version=__version__,
     docs_url="/docs",
     redoc_url="/redoc",
 )
@@ -150,7 +150,9 @@ async def startup_event():
 @app.get("/health", response_model=HealthResponse)
 async def health_check():
     """Health check endpoint"""
-    return HealthResponse(status="healthy", version="1.2.0", vector_store_loaded=state.initialized)
+    return HealthResponse(
+        status="healthy", version=__version__, vector_store_loaded=state.initialized
+    )
 
 
 @app.post("/query", response_model=QueryResponse)

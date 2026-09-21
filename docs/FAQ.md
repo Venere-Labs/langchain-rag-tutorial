@@ -31,6 +31,8 @@ Common questions about LangChain RAG Tutorial.
 | Complex multi-step reasoning | Agentic RAG | [10_agentic_rag.ipynb](../notebooks/advanced_architectures/10_agentic_rag.ipynb) |
 | Technical documentation | Contextual RAG | [12_contextual_rag.ipynb](../notebooks/advanced_architectures/12_contextual_rag.ipynb) |
 | Best ranking quality | Fusion RAG | [13_fusion_rag.ipynb](../notebooks/advanced_architectures/13_fusion_rag.ipynb) |
+| Queries with identifiers, codes or jargon | Hybrid search + reranking | [19_hybrid_search_reranking.ipynb](../notebooks/advanced_architectures/19_hybrid_search_reranking.ipynb) |
+| Small chunks lack context, or questions don't match the text's wording | Parent-document / multi-vector retrieval | [20_parent_multivector_retrieval.ipynb](../notebooks/advanced_architectures/20_parent_multivector_retrieval.ipynb) |
 | Analytics/BI queries | SQL RAG | [14_sql_rag.ipynb](../notebooks/advanced_architectures/14_sql_rag.ipynb) |
 | Knowledge graphs, multi-hop | GraphRAG | [15_graphrag.ipynb](../notebooks/advanced_architectures/15_graphrag.ipynb) |
 | Images + text | Multimodal RAG | [17_multimodal_rag.ipynb](../notebooks/advanced_architectures/17_multimodal_rag.ipynb) |
@@ -129,7 +131,7 @@ See [PERFORMANCE.md](PERFORMANCE.md) for detailed breakdown.
 | Setup | 10 min |
 | Fundamentals (01-03) | 30-40 min |
 | One advanced architecture | 12-30 min |
-| All advanced notebooks (04-18) | 4-5 hours |
+| All advanced notebooks (04-20) | 4-5 hours |
 | With evaluation (RAGAS) | +20 min |
 | **Total** | **5-7 hours** |
 

@@ -15,7 +15,7 @@ FROM python:3.12-slim
 
 LABEL maintainer="LangChain RAG Tutorial"
 LABEL description="RAG tutorial notebooks and API template with LangChain"
-LABEL version="1.3.0"
+LABEL version="1.4.0"
 
 # Non-root user
 RUN useradd -m -u 1000 -s /bin/bash appuser

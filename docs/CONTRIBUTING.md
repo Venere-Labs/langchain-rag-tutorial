@@ -96,6 +96,7 @@ cp .env.example .env
    - `utils.py` - General utilities
    - `loaders.py` - Document loading
    - `prompts.py` - Prompt templates
+   - `retrievers.py` - Retriever builders (hybrid search, reranking)
 
 2. Include docstring:
 

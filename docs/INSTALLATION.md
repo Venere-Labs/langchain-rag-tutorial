@@ -115,16 +115,17 @@ Add `OPENAI_API_KEY` in the Colab Secrets panel (left sidebar) first.
 
 ### LangChain 1.x
 
-| Package                    | Constraint       | Purpose                                                 |
-| -------------------------- | ---------------- | ------------------------------------------------------- |
-| `langchain`                | `>=1.0`          | Agents (`create_agent`), messages                       |
-| `langchain-core`           | `>=1.0`          | Runnables, prompts, documents, message history          |
-| `langchain-openai`         | `>=1.0`          | Chat models and embeddings                              |
-| `langchain-text-splitters` | `>=1.0`          | Text splitters (no longer pulled in by `langchain` 1.x) |
-| `langchain-huggingface`    | `>=1.0`          | Local embeddings                                        |
-| `langchain-tavily`         | `>=0.2`          | Web search tool (notebooks 08 and 10)                   |
-| `langgraph`                | `>=1.0`          | Graph-based workflows                                   |
-| `langchain-community`      | `>=0.4.0,<0.4.2` | FAISS vector store, `WebBaseLoader`                     |
+| Package                    | Constraint       | Purpose                                                                                            |
+| -------------------------- | ---------------- | -------------------------------------------------------------------------------------------------- |
+| `langchain`                | `>=1.0`          | Agents (`create_agent`), messages                                                                  |
+| `langchain-core`           | `>=1.0`          | Runnables, prompts, documents, message history                                                     |
+| `langchain-classic`        | `>=1.0`          | `EnsembleRetriever`, parent-document and multi-vector retrievers, rerankers (notebooks 12, 19, 20) |
+| `langchain-openai`         | `>=1.0`          | Chat models and embeddings                                                                         |
+| `langchain-text-splitters` | `>=1.0`          | Text splitters (no longer pulled in by `langchain` 1.x)                                            |
+| `langchain-huggingface`    | `>=1.0`          | Local embeddings                                                                                   |
+| `langchain-tavily`         | `>=0.2`          | Web search tool (notebooks 08 and 10)                                                              |
+| `langgraph`                | `>=1.0`          | Graph-based workflows                                                                              |
+| `langchain-community`      | `>=0.4.0,<0.4.2` | FAISS vector store, `WebBaseLoader`                                                                |
 
 ### Why `langchain-community` is pinned below 0.4.2
 
@@ -155,7 +156,9 @@ It requires `TAVILY_API_KEY` in `.env`.
 ### Other notable dependencies
 
 - **FAISS** (`faiss-cpu`) - vector similarity search
-- **sentence-transformers** + **accelerate** - embedding fine-tuning (notebook 18)
+- **sentence-transformers** + **accelerate** - embedding fine-tuning (notebook 18) and the
+  cross-encoder reranker (notebooks 12 and 19)
+- **rank-bm25** - BM25 keyword retrieval for hybrid search (notebooks 12 and 19)
 - **NetworkX** + **python-louvain** - GraphRAG (notebook 15)
 - **pandas** - SQL RAG results and RAGAS reports; the SQL notebook uses the standard-library
   `sqlite3` module
@@ -208,6 +211,10 @@ from shared.config import HF_EMBEDDING_MODEL
 hf_embeddings = HuggingFaceEmbeddings(model_name=HF_EMBEDDING_MODEL)
 ```
 
+The cross-encoder reranker used by notebooks 12 and 19 (`DEFAULT_RERANKER_MODEL`, default
+`cross-encoder/ms-marco-MiniLM-L-6-v2`) is also local: it needs no API key, and the first run downloads about
+90 MB into the same cache.
+
 ## Configuration Reference
 
 All settings are read by `shared/config.py`; `.env.example` documents each one.
@@ -228,6 +235,7 @@ DEFAULT_TEMPERATURE=0
 DEFAULT_VISION_MODEL=gpt-4o                 # multimodal RAG (notebook 17)
 OPENAI_EMBEDDING_MODEL=text-embedding-3-small
 HF_EMBEDDING_MODEL=BAAI/bge-small-en-v1.5
+DEFAULT_RERANKER_MODEL=cross-encoder/ms-marco-MiniLM-L-6-v2   # local cross-encoder (notebooks 12 and 19)
 ```
 
 `text-embedding-3-small` has 1536 dimensions; `text-embedding-3-large` has 3072 and is more

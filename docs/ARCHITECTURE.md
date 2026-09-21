@@ -30,7 +30,7 @@ langchain-rag-tutorial/
 |-- shared/                      # Reusable utilities (DRY principle)
 |-- notebooks/
 |   |-- fundamentals/            # Core concepts (01-03)
-|   `-- advanced_architectures/  # Advanced patterns (04-18)
+|   `-- advanced_architectures/  # Advanced patterns (04-20)
 |-- scripts/                     # build_vector_stores.py
 |-- templates/                   # FastAPI, Streamlit, Lambda
 |-- data/                        # Generated artifacts, Chinook DB (gitignored)
@@ -101,6 +101,7 @@ langchain-rag-tutorial/
 **Use Case**: Technical docs, code documentation
 **Innovation**: Anthropic's technique - prepend document context to each chunk
 **Benefits**: 15-30% better retrieval quality with minimal overhead
+**Full recipe**: contextual embeddings + contextual BM25 + reranking (section 11)
 
 ### 10. Fusion RAG (complexity 3/5)
 
@@ -129,6 +130,20 @@ langchain-rag-tutorial/
 **Use Case**: Documents mixing text with images, diagrams or scanned pages
 **Key Components**: Tesseract OCR (`pytesseract`), PDF image extraction (`pdf2image`), vision model (`DEFAULT_VISION_MODEL`)
 
+### 14. Hybrid Search + Reranking (complexity 3/5)
+
+**Pattern**: Query -> [BM25 + Dense Retrieve] -> Weighted RRF -> Cross-Encoder Rerank -> Generate
+**Use Case**: Queries mixing identifiers or jargon with natural language
+**Key Components**: `EnsembleRetriever` (BM25 + FAISS), `ContextualCompressionRetriever` + `CrossEncoderReranker` (`langchain-classic`)
+**Innovation**: Cheap two-retriever recall followed by a precise local reranker (`DEFAULT_RERANKER_MODEL`); no extra API calls
+
+### 15. Parent-Document and Multi-Vector Retrieval (complexity 3/5)
+
+**Pattern**: Index small chunks or generated representations -> Retrieve -> Return parent / original chunk -> Generate
+**Use Case**: Chunk-size trade-offs, vocabulary mismatch between questions and text
+**Key Components**: `ParentDocumentRetriever`, `MultiVectorRetriever` with LLM summaries and hypothetical questions, docstore keyed by `doc_id`
+**Innovation**: Separates what is searched (vector store) from what the LLM reads (docstore)
+
 ### Beyond Architectures
 
 - **Comparison** (notebook 11): side-by-side benchmark of the architectures
@@ -156,6 +171,9 @@ langchain-rag-tutorial/
 - **RAGAS** + **datasets**: evaluation
 - **Matplotlib**: graph visualization
 - **pillow**, **pytesseract**, **pdf2image**: multimodal RAG
+- **langchain-classic** + **rank-bm25**: hybrid search, reranking, parent-document and multi-vector
+  retrievers (LangChain 1.x moved `EnsembleRetriever` and the other legacy retrievers there)
+- **sentence-transformers**: cross-encoder reranker (`cross-encoder/ms-marco-MiniLM-L-6-v2`)
 
 ### Architecture Decisions
 
@@ -191,6 +209,11 @@ langchain-rag-tutorial/
 # Instead of copy-paste in each notebook
 from shared import format_docs, load_vector_store, RAG_PROMPT_TEMPLATE
 ```
+
+Modules: `config.py` (environment, paths, defaults), `utils.py` (formatting, vector store I/O),
+`loaders.py` (document loading and splitting), `prompts.py` (all prompt templates) and
+`retrievers.py` (builders for BM25, hybrid BM25 + dense and cross-encoder reranking retrievers,
+used by notebooks 12 and 19).
 
 **Benefits:**
 
@@ -234,7 +257,7 @@ outside the notebooks with `make vector-stores` (`scripts/build_vector_stores.py
 ```
 00_index.ipynb -> Overview + Navigation
 01-03 -> Fundamentals (required)
-04-18 -> Advanced (architectures, comparison, evaluation, fine-tuning; pick by use case)
+04-20 -> Advanced (architectures, comparison, evaluation, fine-tuning; pick by use case)
 ```
 
 **Benefits:**
@@ -281,7 +304,7 @@ __pycache__/            # Python cache
 
 ### Adding New Architecture
 
-1. Create notebook: `notebooks/advanced_architectures/19_new_pattern.ipynb`
+1. Create notebook: `notebooks/advanced_architectures/21_new_pattern.ipynb`
 2. Add prompts to `shared/prompts.py`
 3. Update `11_comparison.ipynb` with new benchmark
 4. Document in `notebooks/advanced_architectures/README.md`

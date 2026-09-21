@@ -15,7 +15,7 @@ load_dotenv()
 os.environ["TOKENIZERS_PARALLELISM"] = os.getenv("TOKENIZERS_PARALLELISM", "false")
 
 # Set User Agent for HTTP requests
-USER_AGENT = os.getenv("USER_AGENT", "LangChain-RAG-Tutorial/1.3")
+USER_AGENT = os.getenv("USER_AGENT", "LangChain-RAG-Tutorial/1.4")
 os.environ["USER_AGENT"] = USER_AGENT
 
 # ============================================================================
@@ -93,6 +93,9 @@ DEFAULT_MMR_FETCH_K = int(
 DEFAULT_MMR_LAMBDA = float(
     os.getenv("DEFAULT_MMR_LAMBDA", "0.5")
 )  # Balance between relevance (1.0) and diversity (0.0)
+DEFAULT_RERANKER_MODEL = os.getenv(
+    "DEFAULT_RERANKER_MODEL", "cross-encoder/ms-marco-MiniLM-L-6-v2"
+)  # Local cross-encoder for reranking (notebooks 12, 19); ~90 MB, fast on CPU
 
 # LLM
 DEFAULT_MODEL = os.getenv("DEFAULT_MODEL", "gpt-4o-mini")
@@ -184,6 +187,7 @@ def get_project_info() -> dict:
         "k": DEFAULT_K,
         "mmr_fetch_k": DEFAULT_MMR_FETCH_K,
         "mmr_lambda": DEFAULT_MMR_LAMBDA,
+        "reranker_model": DEFAULT_RERANKER_MODEL,
         # Display
         "section_width": SECTION_WIDTH,
         "preview_length": PREVIEW_LENGTH,

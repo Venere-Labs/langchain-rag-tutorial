@@ -10,7 +10,7 @@
 A hands-on tutorial for building **Retrieval-Augmented Generation (RAG)** systems with LangChain 1.x,
 from a first retrieval chain to graph-based, agentic and multimodal architectures.
 
-**Contents:** 19 Jupyter notebooks (an index plus 01-18) covering 13 RAG architectures, RAGAS evaluation and embedding
+**Contents:** 21 Jupyter notebooks (an index plus 01-20) covering 15 RAG architectures, RAGAS evaluation and embedding
 fine-tuning; a reusable `shared/` module; FastAPI, Streamlit and AWS Lambda deployment templates;
 Docker support, a pytest suite and GitHub Actions CI.
 
@@ -40,23 +40,25 @@ document loading and splitting (01), OpenAI vs HuggingFace embeddings (02), simp
 
 **Advanced architectures** ([notebooks/advanced_architectures/](notebooks/advanced_architectures/), 4-5 hours):
 
-| #   | Notebook                                                                                  | Complexity | Use case          | Key technique                    |
-| --- | ----------------------------------------------------------------------------------------- | ---------- | ----------------- | -------------------------------- |
-| 04  | [Memory RAG](notebooks/advanced_architectures/04_rag_with_memory.ipynb)                   | 2/5        | Chatbots          | Conversation history             |
-| 05  | [Branched RAG](notebooks/advanced_architectures/05_branched_rag.ipynb)                    | 3/5        | Research          | Multi-query parallel retrieval   |
-| 06  | [HyDE](notebooks/advanced_architectures/06_hyde.ipynb)                                    | 3/5        | Ambiguous queries | Hypothetical documents           |
-| 07  | [Adaptive RAG](notebooks/advanced_architectures/07_adaptive_rag.ipynb)                    | 4/5        | Mixed workloads   | Query routing                    |
-| 08  | [Corrective RAG](notebooks/advanced_architectures/08_corrective_rag.ipynb)                | 4/5        | High accuracy     | Relevance grading + web fallback |
-| 09  | [Self-RAG](notebooks/advanced_architectures/09_self_rag.ipynb)                            | 5/5        | Self-correcting   | Self-critique and refinement     |
-| 10  | [Agentic RAG](notebooks/advanced_architectures/10_agentic_rag.ipynb)                      | 5/5        | Complex reasoning | Multi-tool agent loop            |
-| 11  | [Comparison](notebooks/advanced_architectures/11_comparison.ipynb)                        | -          | Benchmarking      | Side-by-side evaluation          |
-| 12  | [Contextual RAG](notebooks/advanced_architectures/12_contextual_rag.ipynb)                | 3/5        | Technical docs    | Context-augmented chunks         |
-| 13  | [Fusion RAG](notebooks/advanced_architectures/13_fusion_rag.ipynb)                        | 3/5        | Ranking quality   | Reciprocal Rank Fusion           |
-| 14  | [SQL RAG](notebooks/advanced_architectures/14_sql_rag.ipynb)                              | 4/5        | Analytics/BI      | Natural language to SQL          |
-| 15  | [GraphRAG](notebooks/advanced_architectures/15_graphrag.ipynb)                            | 5/5        | Knowledge graphs  | Entity graph + multi-hop         |
-| 16  | [RAGAS Evaluation](notebooks/advanced_architectures/16_evaluation_ragas.ipynb)            | -          | Quality metrics   | RAG assessment                   |
-| 17  | [Multimodal RAG](notebooks/advanced_architectures/17_multimodal_rag.ipynb)                | 4/5        | Images + text     | Vision model + OCR               |
-| 18  | [Fine-tuning Embeddings](notebooks/advanced_architectures/18_finetuning_embeddings.ipynb) | 4/5        | Domain retrieval  | Custom embedding models          |
+| #   | Notebook                                                                                                   | Complexity | Use case            | Key technique                    |
+| --- | ---------------------------------------------------------------------------------------------------------- | ---------- | ------------------- | -------------------------------- |
+| 04  | [Memory RAG](notebooks/advanced_architectures/04_rag_with_memory.ipynb)                                    | 2/5        | Chatbots            | Conversation history             |
+| 05  | [Branched RAG](notebooks/advanced_architectures/05_branched_rag.ipynb)                                     | 3/5        | Research            | Multi-query parallel retrieval   |
+| 06  | [HyDE](notebooks/advanced_architectures/06_hyde.ipynb)                                                     | 3/5        | Ambiguous queries   | Hypothetical documents           |
+| 07  | [Adaptive RAG](notebooks/advanced_architectures/07_adaptive_rag.ipynb)                                     | 4/5        | Mixed workloads     | Query routing                    |
+| 08  | [Corrective RAG](notebooks/advanced_architectures/08_corrective_rag.ipynb)                                 | 4/5        | High accuracy       | Relevance grading + web fallback |
+| 09  | [Self-RAG](notebooks/advanced_architectures/09_self_rag.ipynb)                                             | 5/5        | Self-correcting     | Self-critique and refinement     |
+| 10  | [Agentic RAG](notebooks/advanced_architectures/10_agentic_rag.ipynb)                                       | 5/5        | Complex reasoning   | Multi-tool agent loop            |
+| 11  | [Comparison](notebooks/advanced_architectures/11_comparison.ipynb)                                         | -          | Benchmarking        | Side-by-side evaluation          |
+| 12  | [Contextual RAG](notebooks/advanced_architectures/12_contextual_rag.ipynb)                                 | 3/5        | Technical docs      | Context-augmented chunks         |
+| 13  | [Fusion RAG](notebooks/advanced_architectures/13_fusion_rag.ipynb)                                         | 3/5        | Ranking quality     | Reciprocal Rank Fusion           |
+| 14  | [SQL RAG](notebooks/advanced_architectures/14_sql_rag.ipynb)                                               | 4/5        | Analytics/BI        | Natural language to SQL          |
+| 15  | [GraphRAG](notebooks/advanced_architectures/15_graphrag.ipynb)                                             | 5/5        | Knowledge graphs    | Entity graph + multi-hop         |
+| 16  | [RAGAS Evaluation](notebooks/advanced_architectures/16_evaluation_ragas.ipynb)                             | -          | Quality metrics     | RAG assessment                   |
+| 17  | [Multimodal RAG](notebooks/advanced_architectures/17_multimodal_rag.ipynb)                                 | 4/5        | Images + text       | Vision model + OCR               |
+| 18  | [Fine-tuning Embeddings](notebooks/advanced_architectures/18_finetuning_embeddings.ipynb)                  | 4/5        | Domain retrieval    | Custom embedding models          |
+| 19  | [Hybrid Search + Reranking](notebooks/advanced_architectures/19_hybrid_search_reranking.ipynb)             | 3/5        | Identifiers, jargon | BM25 + dense + cross-encoder     |
+| 20  | [Parent-Document and Multi-Vector](notebooks/advanced_architectures/20_parent_multivector_retrieval.ipynb) | 3/5        | Chunk-size dilemma  | Search small, return large       |
 
 For help choosing an architecture see the [FAQ](docs/FAQ.md#which-architecture-should-i-choose);
 for latency and cost figures see [Performance](docs/PERFORMANCE.md).
@@ -85,8 +87,8 @@ langchain-rag-tutorial/
 |-- notebooks/
 |   |-- 00_index.ipynb              # Start here: navigation and environment check
 |   |-- fundamentals/               # 01-03
-|   `-- advanced_architectures/     # 04-18
-|-- shared/                         # config, utils, loaders, prompts
+|   `-- advanced_architectures/     # 04-20
+|-- shared/                         # config, utils, loaders, prompts, retrievers
 |-- templates/                      # fastapi/, streamlit/, lambda/
 |-- scripts/build_vector_stores.py  # Pre-builds FAISS vector stores
 |-- tests/                          # pytest suite for shared/
@@ -133,5 +135,6 @@ MIT License.
 
 ---
 
-**Latest version:** v1.3.0 (2026-09-21): LangChain 1.x, Python 3.10-3.13, ruff tooling.
+**Latest version:** v1.4.0 (2026-09-21): hybrid search and reranking (notebook 19), parent-document and
+multi-vector retrieval (notebook 20), full contextual retrieval in notebook 12.
 See the [Changelog](docs/CHANGELOG.md).

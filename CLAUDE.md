@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-A LangChain 1.x RAG tutorial: 19 Jupyter notebooks (`00_index` + 01-18) teaching RAG architectures,
+A LangChain 1.x RAG tutorial: 21 Jupyter notebooks (`00_index` + 01-20) teaching RAG architectures,
 backed by a reusable `shared/` package and three deployment templates (FastAPI, Streamlit, AWS
 Lambda). Supported Python: 3.10-3.13 (`.python-version` is 3.12; ruff targets py310, so no 3.11+
 syntax). OpenAI is the default provider; Tavily (notebooks 08, 10) and Tesseract/Poppler

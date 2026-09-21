@@ -150,9 +150,34 @@ result1 = adaptive_rag(simple_query)  # Similarity
 result2 = adaptive_rag(complex_query)  # HyDE
 ```
 
+### 5. Hybrid Search with Reranking
+
+```python
+from shared import build_hybrid_retriever, build_reranking_retriever
+from shared.loaders import load_and_split
+
+# BM25 needs the same chunks that were indexed in the vector store
+_, chunks = load_and_split()
+
+# BM25 + dense, fused with weighted Reciprocal Rank Fusion (up to 2 * k candidates)
+hybrid = build_hybrid_retriever(chunks, vectorstore, k=10, bm25_weight=0.5)
+
+# Cross-encoder reranker keeps the best 4 (DEFAULT_RERANKER_MODEL, ~90 MB download on first use)
+reranked = build_reranking_retriever(hybrid, top_n=4)
+
+hybrid_chain = (
+    {"context": reranked | format_docs, "input": RunnablePassthrough()}
+    | RAG_PROMPT_TEMPLATE
+    | llm
+    | StrOutputParser()
+)
+
+response = hybrid_chain.invoke("What does trim_messages do?")
+```
+
 ## Advanced Patterns
 
-### 5. Custom Document Loader
+### 6. Custom Document Loader
 
 ```python
 from pathlib import Path
@@ -190,7 +215,7 @@ vectorstore_custom = FAISS.from_documents(chunks, embeddings)
 save_vector_store(vectorstore_custom, VECTOR_STORE_DIR / "custom")
 ```
 
-### 6. Metadata Filtering
+### 7. Metadata Filtering
 
 ```python
 # Add rich metadata during loading
@@ -221,7 +246,7 @@ tutorial_docs = filtered_retrieve("How to build RAG?", "tutorial")
 api_docs = filtered_retrieve("What is the API for embeddings?", "api")
 ```
 
-### 7. Batch Processing
+### 8. Batch Processing
 
 ```python
 def batch_process_queries(queries: list, chain):
@@ -253,7 +278,7 @@ with open("batch_results.json", "w") as f:
     json.dump(results, f, indent=2)
 ```
 
-### 8. Cost Tracking
+### 9. Cost Tracking
 
 ```python
 from shared.utils import estimate_tokens, estimate_embedding_cost
@@ -287,7 +312,7 @@ print(f"Total cost: ${costs['total_cost']:.6f}")
 print(f"Tokens: {costs['total_tokens']}")
 ```
 
-### 9. Error Handling and Retry
+### 10. Error Handling and Retry
 
 ```python
 from tenacity import retry, stop_after_attempt, wait_exponential
@@ -309,7 +334,7 @@ def robust_rag_query(query: str, chain):
 result = robust_rag_query("What is RAG?", chain)
 ```
 
-### 10. Async Parallel Processing
+### 11. Async Parallel Processing
 
 ```python
 import asyncio

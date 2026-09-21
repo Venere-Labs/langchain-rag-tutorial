@@ -73,21 +73,23 @@ Alternatively, build the vector stores up front with `make vector-stores`
 
 ### Step 3: Advanced Architectures (pick by use case)
 
-| Complexity | Question                    | Notebook                                                                                             |
-| ---------- | --------------------------- | ---------------------------------------------------------------------------------------------------- |
-| 2/5        | Chatbot with memory?        | [04_rag_with_memory.ipynb](../notebooks/advanced_architectures/04_rag_with_memory.ipynb)             |
-| 3/5        | Research coverage?          | [05_branched_rag.ipynb](../notebooks/advanced_architectures/05_branched_rag.ipynb)                   |
-| 3/5        | Ambiguous queries?          | [06_hyde.ipynb](../notebooks/advanced_architectures/06_hyde.ipynb)                                   |
-| 4/5        | Mixed workload?             | [07_adaptive_rag.ipynb](../notebooks/advanced_architectures/07_adaptive_rag.ipynb)                   |
-| 4/5        | High accuracy?              | [08_corrective_rag.ipynb](../notebooks/advanced_architectures/08_corrective_rag.ipynb)               |
-| 5/5        | Self-correcting?            | [09_self_rag.ipynb](../notebooks/advanced_architectures/09_self_rag.ipynb)                           |
-| 5/5        | Complex reasoning?          | [10_agentic_rag.ipynb](../notebooks/advanced_architectures/10_agentic_rag.ipynb)                     |
-| 3/5        | Technical docs?             | [12_contextual_rag.ipynb](../notebooks/advanced_architectures/12_contextual_rag.ipynb)               |
-| 3/5        | Best ranking?               | [13_fusion_rag.ipynb](../notebooks/advanced_architectures/13_fusion_rag.ipynb)                       |
-| 4/5        | Analytics/BI?               | [14_sql_rag.ipynb](../notebooks/advanced_architectures/14_sql_rag.ipynb)                             |
-| 5/5        | Knowledge graphs?           | [15_graphrag.ipynb](../notebooks/advanced_architectures/15_graphrag.ipynb)                           |
-| 4/5        | Images + text?              | [17_multimodal_rag.ipynb](../notebooks/advanced_architectures/17_multimodal_rag.ipynb)               |
-| 4/5        | Domain-specific embeddings? | [18_finetuning_embeddings.ipynb](../notebooks/advanced_architectures/18_finetuning_embeddings.ipynb) |
+| Complexity | Question                    | Notebook                                                                                                           |
+| ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| 2/5        | Chatbot with memory?        | [04_rag_with_memory.ipynb](../notebooks/advanced_architectures/04_rag_with_memory.ipynb)                           |
+| 3/5        | Research coverage?          | [05_branched_rag.ipynb](../notebooks/advanced_architectures/05_branched_rag.ipynb)                                 |
+| 3/5        | Ambiguous queries?          | [06_hyde.ipynb](../notebooks/advanced_architectures/06_hyde.ipynb)                                                 |
+| 4/5        | Mixed workload?             | [07_adaptive_rag.ipynb](../notebooks/advanced_architectures/07_adaptive_rag.ipynb)                                 |
+| 4/5        | High accuracy?              | [08_corrective_rag.ipynb](../notebooks/advanced_architectures/08_corrective_rag.ipynb)                             |
+| 5/5        | Self-correcting?            | [09_self_rag.ipynb](../notebooks/advanced_architectures/09_self_rag.ipynb)                                         |
+| 5/5        | Complex reasoning?          | [10_agentic_rag.ipynb](../notebooks/advanced_architectures/10_agentic_rag.ipynb)                                   |
+| 3/5        | Technical docs?             | [12_contextual_rag.ipynb](../notebooks/advanced_architectures/12_contextual_rag.ipynb)                             |
+| 3/5        | Best ranking?               | [13_fusion_rag.ipynb](../notebooks/advanced_architectures/13_fusion_rag.ipynb)                                     |
+| 4/5        | Analytics/BI?               | [14_sql_rag.ipynb](../notebooks/advanced_architectures/14_sql_rag.ipynb)                                           |
+| 5/5        | Knowledge graphs?           | [15_graphrag.ipynb](../notebooks/advanced_architectures/15_graphrag.ipynb)                                         |
+| 4/5        | Images + text?              | [17_multimodal_rag.ipynb](../notebooks/advanced_architectures/17_multimodal_rag.ipynb)                             |
+| 4/5        | Domain-specific embeddings? | [18_finetuning_embeddings.ipynb](../notebooks/advanced_architectures/18_finetuning_embeddings.ipynb)               |
+| 3/5        | Identifiers and jargon?     | [19_hybrid_search_reranking.ipynb](../notebooks/advanced_architectures/19_hybrid_search_reranking.ipynb)           |
+| 3/5        | Chunk-size trade-offs?      | [20_parent_multivector_retrieval.ipynb](../notebooks/advanced_architectures/20_parent_multivector_retrieval.ipynb) |
 
 For analysis, [11_comparison.ipynb](../notebooks/advanced_architectures/11_comparison.ipynb)
 benchmarks the architectures and

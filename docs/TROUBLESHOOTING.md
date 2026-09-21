@@ -307,7 +307,7 @@ vectorstore = FAISS.load_local(
 
 **Explanation:** Expected behavior
 
-- HuggingFace model downloads (~90MB)
+- HuggingFace model downloads (~90MB; plus ~90MB for the reranker in notebooks 12 and 19)
 - Vector store creation (embedding all documents)
 - Package initialization
 
@@ -469,12 +469,13 @@ pip install numexpr
 
 **Solution:** use the LangChain 1.x locations:
 
-| Old import                                                        | Current import                                                      |
-| ----------------------------------------------------------------- | ------------------------------------------------------------------- |
-| `langchain_community.chat_message_histories.ChatMessageHistory`   | `langchain_core.chat_history.InMemoryChatMessageHistory`            |
-| `langchain_community.tools.tavily_search.TavilySearchResults`     | `langchain_tavily.TavilySearch`                                     |
-| `langchain.text_splitter.RecursiveCharacterTextSplitter`          | `langchain_text_splitters.RecursiveCharacterTextSplitter`           |
-| `langchain.schema.Document`                                       | `langchain_core.documents.Document`                                 |
+| Old import                                                                  | Current import                                            |
+| --------------------------------------------------------------------------- | --------------------------------------------------------- |
+| `langchain_community.chat_message_histories.ChatMessageHistory`             | `langchain_core.chat_history.InMemoryChatMessageHistory`  |
+| `langchain_community.tools.tavily_search.TavilySearchResults`               | `langchain_tavily.TavilySearch`                           |
+| `langchain.text_splitter.RecursiveCharacterTextSplitter`                    | `langchain_text_splitters.RecursiveCharacterTextSplitter` |
+| `langchain.schema.Document`                                                 | `langchain_core.documents.Document`                       |
+| `langchain.retrievers.EnsembleRetriever` (and other `langchain.retrievers`) | `langchain_classic.retrievers.EnsembleRetriever`          |
 
 ### LangGraph Issues (Agentic RAG)
 

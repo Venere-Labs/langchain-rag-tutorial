@@ -39,6 +39,8 @@ Benchmarks and performance expectations for LangChain RAG Tutorial.
 | HyDe | 4-6s | 2 LLM calls | ~3,000 tokens |
 | Contextual RAG | 2-3s | 1 LLM call (+ upfront context) | ~1,800 tokens |
 | Fusion RAG | 5-8s | 5-6 LLM calls | ~7,000 tokens |
+| Hybrid + Rerank | 2-4s | 1 LLM call (+ local reranker) | ~1,500 tokens |
+| Parent-Document / Multi-Vector | 2-3s | 1 LLM call (+ indexing-time LLM calls for multi-vector) | ~1,500-4,000 tokens (parents are larger) |
 | Adaptive RAG | Variable | 2-3 LLM calls | 2,000-6,000 tokens (depends on route) |
 | SQL RAG | 2-5s | 2-3 LLM calls | ~2,500 tokens |
 | CRAG | 10-15s | 5-6 LLM calls | ~8,000 tokens |
@@ -52,6 +54,9 @@ Benchmarks and performance expectations for LangChain RAG Tutorial.
 - Number of retrieved documents (k)
 - LLM model speed
 - Number of iterations (Self-RAG, Agentic)
+- Cross-encoder reranking (notebooks 12, 19): about 1-4 s per query on a laptop CPU with the
+  default MiniLM model and 20 candidates, ~5x more with `BAAI/bge-reranker-base`; latency grows with
+  the number and length of candidates; load the model once and reuse it
 
 ## Cost Estimates
 
@@ -115,11 +120,12 @@ Benchmarks and performance expectations for LangChain RAG Tutorial.
 ```text
 venv/                 ~900 MB   Python dependencies
 .cache/huggingface/   ~90 MB    Sentence-transformers model
+.cache/huggingface/   ~90 MB    Reranker model (ms-marco-MiniLM-L-6-v2, notebooks 12, 19)
 data/vector_stores/   1-5 MB    FAISS indexes
 data/chinook.db       984 KB    Chinook SQLite database (SQL RAG)
-notebooks/            ~600 KB   19 Jupyter notebooks
+notebooks/            ~700 KB   21 Jupyter notebooks
 shared/               ~150 KB   Shared Python modules
-Total:                ~1.1 GB
+Total:                ~1.2 GB
 ```
 
 ## Optimization Strategies

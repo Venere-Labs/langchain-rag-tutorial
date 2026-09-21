@@ -24,7 +24,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 # MODULE EXPORTS
 # ============================================================================
 
-__version__ = "1.3.0"
+__version__ = "1.4.0"
 
 from .config import (  # noqa: E402
     CACHE_DIR,
@@ -40,11 +40,13 @@ from .loaders import (  # noqa: E402
     split_documents,
 )
 from .prompts import (  # noqa: E402
+    CHUNK_SUMMARY_PROMPT,
     ENTITY_DISAMBIGUATION_PROMPT,
     ENTITY_EXTRACTION_PROMPT,
     GRAPH_SUMMARIZATION_PROMPT,
     GRAPHRAG_ANSWER_PROMPT,
     HYDE_PROMPT,
+    HYPOTHETICAL_QUESTIONS_PROMPT,
     RAG_PROMPT_TEMPLATE,
     RAG_WITH_METADATA_PROMPT,
     RELATIONSHIP_EXTRACTION_PROMPT,
@@ -53,6 +55,12 @@ from .prompts import (  # noqa: E402
     SQL_RESULTS_INTERPRETATION_PROMPT,
     SQL_SCHEMA_SUMMARY_PROMPT,
     TEXT_TO_SQL_PROMPT,
+)
+from .retrievers import (  # noqa: E402
+    bm25_tokenize,
+    build_bm25_retriever,
+    build_hybrid_retriever,
+    build_reranking_retriever,
 )
 from .utils import (  # noqa: E402
     format_docs,
@@ -78,6 +86,11 @@ __all__ = [
     "save_vector_store",
     "print_section_header",
     "print_results",
+    # Retrievers
+    "bm25_tokenize",
+    "build_bm25_retriever",
+    "build_hybrid_retriever",
+    "build_reranking_retriever",
     # Loaders
     "load_langchain_docs",
     "split_documents",
@@ -96,4 +109,6 @@ __all__ = [
     "ENTITY_DISAMBIGUATION_PROMPT",
     "GRAPH_SUMMARIZATION_PROMPT",
     "GRAPHRAG_ANSWER_PROMPT",
+    "CHUNK_SUMMARY_PROMPT",
+    "HYPOTHETICAL_QUESTIONS_PROMPT",
 ]
