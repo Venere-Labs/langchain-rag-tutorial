@@ -33,7 +33,7 @@ from shared.prompts import RAG_PROMPT_TEMPLATE
 
 ```python
 import shared
-print(shared.__version__)  # "1.0.0"
+print(shared.__version__)  # "1.3.0"
 ```
 
 ---
@@ -83,6 +83,20 @@ VECTOR_STORE_DIR: Path
 ```
 
 Path to vector stores directory (`data/vector_stores/`).
+
+---
+
+#### `OPENAI_VECTOR_STORE_PATH` / `HF_VECTOR_STORE_PATH`
+
+```python
+OPENAI_VECTOR_STORE_PATH: Path  # data/vector_stores/openai__<OPENAI_EMBEDDING_MODEL>
+HF_VECTOR_STORE_PATH: Path      # data/vector_stores/hf__<HF_EMBEDDING_MODEL, "/" -> "__">
+```
+
+Vector store locations keyed by embedding model. Defaults: `openai__text-embedding-3-small` and
+`hf__BAAI__bge-small-en-v1.5`. Changing `OPENAI_EMBEDDING_MODEL` or `HF_EMBEDDING_MODEL` points to
+a different directory, so a stale index built with another model is never loaded. Import from
+`shared.config`.
 
 ---
 
@@ -226,10 +240,10 @@ formatted = format_docs(retrieved_docs)
 
 ```python
 def load_vector_store(
-    path: Union[str, Path],
+    path: str | Path,
     embeddings: Embeddings,
     verbose: bool = True
-) -> FAISS
+) -> FAISS | None
 ```
 
 Loads FAISS vector store from disk.
@@ -240,20 +254,32 @@ Loads FAISS vector store from disk.
 - `embeddings`: Embeddings instance (must match stored embeddings)
 - `verbose`: Print loading info
 
-**Returns**: FAISS vector store instance.
-
-**Raises**: `FileNotFoundError` if path doesn't exist.
+**Returns**: FAISS vector store instance, or `None` if the store is missing or cannot be loaded.
+Use `require_vector_store()` when a missing store should be an error.
 
 **Example:**
 
 ```python
 from shared.utils import load_vector_store
-from shared.config import OPENAI_VECTOR_STORE_PATH
+from shared.config import OPENAI_EMBEDDING_MODEL, OPENAI_VECTOR_STORE_PATH
 from langchain_openai import OpenAIEmbeddings
 
-embeddings = OpenAIEmbeddings()
+embeddings = OpenAIEmbeddings(model=OPENAI_EMBEDDING_MODEL)
 vectorstore = load_vector_store(OPENAI_VECTOR_STORE_PATH, embeddings)
 ```
+
+---
+
+#### `require_vector_store()`
+
+```python
+def require_vector_store(path: str | Path, embeddings: Embeddings) -> FAISS
+```
+
+Loads a FAISS vector store that must already exist.
+
+**Raises**: `FileNotFoundError` if the store is missing or cannot be loaded; the message explains
+how to build it (`make vector-stores` or notebook 02).
 
 ---
 
@@ -262,7 +288,7 @@ vectorstore = load_vector_store(OPENAI_VECTOR_STORE_PATH, embeddings)
 ```python
 def save_vector_store(
     vectorstore: FAISS,
-    path: Union[str, Path],
+    path: str | Path,
     verbose: bool = True
 ) -> None
 ```
@@ -717,7 +743,7 @@ Agentic RAG ReAct agent prompt.
 
 ---
 
-### New Prompts in v1.1.0 ✨
+### Contextual, Fusion, SQL and GraphRAG Prompts
 
 #### `DOCUMENT_SUMMARY_PROMPT`
 
@@ -921,6 +947,8 @@ prompt = get_prompt_by_name("HYDE")
 
 ```python
 from shared import *
+from shared.config import DEFAULT_MODEL, DEFAULT_TEMPERATURE, OPENAI_EMBEDDING_MODEL
+from langchain_community.vectorstores import FAISS
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
@@ -930,7 +958,7 @@ docs = load_langchain_docs()
 chunks = split_documents(docs)
 
 # Create embeddings and vector store
-embeddings = OpenAIEmbeddings()
+embeddings = OpenAIEmbeddings(model=OPENAI_EMBEDDING_MODEL)
 vectorstore = FAISS.from_documents(chunks, embeddings)
 
 # Save for reuse
@@ -957,34 +985,16 @@ print(response)
 
 ```python
 from shared import *
+from shared.config import OPENAI_EMBEDDING_MODEL, OPENAI_VECTOR_STORE_PATH
 from langchain_openai import OpenAIEmbeddings
 
 # Load pre-built vector store
-embeddings = OpenAIEmbeddings()
-vectorstore = load_vector_store(VECTOR_STORE_DIR / "openai_embeddings", embeddings)
+embeddings = OpenAIEmbeddings(model=OPENAI_EMBEDDING_MODEL)
+vectorstore = require_vector_store(OPENAI_VECTOR_STORE_PATH, embeddings)
 
 # Use immediately
 retriever = vectorstore.as_retriever()
 ```
-
----
-
-## Version History
-
-- **v1.1.0** (2025-11-12): Major expansion
-  - 18 new prompt templates (30+ total) ✨
-  - Contextual RAG prompts (3 prompts)
-  - Fusion RAG prompts (2 prompts)
-  - SQL RAG prompts (4 prompts)
-  - GraphRAG prompts (5 prompts)
-  - Shared module expanded to 1500+ lines
-  - New dependencies: NetworkX, SQLAlchemy, RAGAS, Spacy
-
-- **v1.0.0** (2024-11-12): Initial release
-  - Core utilities (config, utils, loaders, prompts)
-  - 13 prompt templates
-  - Vector store persistence
-  - Cost estimation utilities
 
 ---
 
@@ -993,3 +1003,4 @@ retriever = vectorstore.as_retriever()
 - [ARCHITECTURE.md](ARCHITECTURE.md) - Design decisions
 - [EXAMPLES.md](EXAMPLES.md) - Usage patterns
 - [CONTRIBUTING.md](CONTRIBUTING.md) - Extend shared module
+- [CHANGELOG.md](CHANGELOG.md) - Version history

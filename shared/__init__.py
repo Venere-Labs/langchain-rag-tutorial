@@ -7,8 +7,8 @@ Provides reusable functions, configurations, and prompts across all notebooks.
 # EARLY WARNING SUPPRESSION
 # Must run BEFORE any langchain/pydantic imports to prevent warnings
 # ============================================================================
-import warnings
 import logging
+import warnings
 
 # Suppress Pydantic V1 compatibility warnings (preventive, in case of Python 3.14+)
 warnings.filterwarnings("ignore", category=UserWarning, module="pydantic.v1")
@@ -24,45 +24,43 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 # MODULE EXPORTS
 # ============================================================================
 
-__version__ = "1.0.0"
+__version__ = "1.3.0"
 
 from .config import (  # noqa: E402
+    CACHE_DIR,
+    DEFAULT_CHUNK_OVERLAP,
+    DEFAULT_CHUNK_SIZE,
+    DEFAULT_K,
     OPENAI_API_KEY,
     VECTOR_STORE_DIR,
-    CACHE_DIR,
-    DEFAULT_CHUNK_SIZE,
-    DEFAULT_CHUNK_OVERLAP,
-    DEFAULT_K,
 )
-
+from .loaders import (  # noqa: E402
+    load_and_split,
+    load_langchain_docs,
+    split_documents,
+)
+from .prompts import (  # noqa: E402
+    ENTITY_DISAMBIGUATION_PROMPT,
+    ENTITY_EXTRACTION_PROMPT,
+    GRAPH_SUMMARIZATION_PROMPT,
+    GRAPHRAG_ANSWER_PROMPT,
+    HYDE_PROMPT,
+    RAG_PROMPT_TEMPLATE,
+    RAG_WITH_METADATA_PROMPT,
+    RELATIONSHIP_EXTRACTION_PROMPT,
+    RELEVANCE_GRADER_PROMPT,
+    SQL_ERROR_RECOVERY_PROMPT,
+    SQL_RESULTS_INTERPRETATION_PROMPT,
+    SQL_SCHEMA_SUMMARY_PROMPT,
+    TEXT_TO_SQL_PROMPT,
+)
 from .utils import (  # noqa: E402
     format_docs,
     load_vector_store,
-    save_vector_store,
-    print_section_header,
     print_results,
-)
-
-from .loaders import (  # noqa: E402
-    load_langchain_docs,
-    split_documents,
-    load_and_split,
-)
-
-from .prompts import (  # noqa: E402
-    RAG_PROMPT_TEMPLATE,
-    RAG_WITH_METADATA_PROMPT,
-    RELEVANCE_GRADER_PROMPT,
-    HYDE_PROMPT,
-    SQL_SCHEMA_SUMMARY_PROMPT,
-    TEXT_TO_SQL_PROMPT,
-    SQL_RESULTS_INTERPRETATION_PROMPT,
-    SQL_ERROR_RECOVERY_PROMPT,
-    ENTITY_EXTRACTION_PROMPT,
-    RELATIONSHIP_EXTRACTION_PROMPT,
-    ENTITY_DISAMBIGUATION_PROMPT,
-    GRAPH_SUMMARIZATION_PROMPT,
-    GRAPHRAG_ANSWER_PROMPT,
+    print_section_header,
+    require_vector_store,
+    save_vector_store,
 )
 
 __all__ = [
@@ -76,6 +74,7 @@ __all__ = [
     # Utils
     "format_docs",
     "load_vector_store",
+    "require_vector_store",
     "save_vector_store",
     "print_section_header",
     "print_results",

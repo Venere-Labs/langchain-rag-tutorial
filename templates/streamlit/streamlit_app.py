@@ -3,22 +3,25 @@ Streamlit Production Template for LangChain RAG
 Interactive UI for querying the RAG system
 """
 
-import streamlit as st
 import sys
-from pathlib import Path
 import time
+from pathlib import Path
+
+import streamlit as st
 
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
-from shared import (
-    load_vector_store,
-    format_docs,
-    VECTOR_STORE_DIR
+from shared import format_docs, require_vector_store
+from shared.config import (
+    DEFAULT_MODEL,
+    DEFAULT_TEMPERATURE,
+    OPENAI_EMBEDDING_MODEL,
+    OPENAI_VECTOR_STORE_PATH,
 )
 from shared.prompts import RAG_PROMPT_TEMPLATE
 
@@ -27,11 +30,12 @@ st.set_page_config(
     page_title="LangChain RAG Tutorial",
     page_icon="🦜",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
 )
 
 # Custom CSS
-st.markdown("""
+st.markdown(
+    """
     <style>
     .main-header {
         font-size: 3rem;
@@ -43,7 +47,9 @@ st.markdown("""
         margin-top: 1rem;
     }
     </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 
 @st.cache_resource
@@ -51,14 +57,11 @@ def initialize_rag():
     """Initialize RAG components (cached)"""
     try:
         # Load embeddings and vector store
-        embeddings = OpenAIEmbeddings()
-        vectorstore = load_vector_store(
-            VECTOR_STORE_DIR / "openai_embeddings",
-            embeddings
-        )
+        embeddings = OpenAIEmbeddings(model=OPENAI_EMBEDDING_MODEL)
+        vectorstore = require_vector_store(OPENAI_VECTOR_STORE_PATH, embeddings)
 
         # Initialize LLM
-        llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+        llm = ChatOpenAI(model=DEFAULT_MODEL, temperature=DEFAULT_TEMPERATURE)
 
         return vectorstore, llm
 
@@ -81,7 +84,7 @@ def main():
         architecture = st.selectbox(
             "RAG Architecture",
             ["Simple RAG", "Contextual RAG", "Fusion RAG"],
-            help="Select the RAG architecture to use"
+            help="Select the RAG architecture to use",
         )
 
         # Number of documents
@@ -90,7 +93,7 @@ def main():
             min_value=1,
             max_value=10,
             value=4,
-            help="Number of documents to retrieve from vector store"
+            help="Number of documents to retrieve from vector store",
         )
 
         # Temperature
@@ -100,7 +103,7 @@ def main():
             max_value=1.0,
             value=0.0,
             step=0.1,
-            help="Controls randomness in responses"
+            help="Controls randomness in responses",
         )
 
         st.divider()
@@ -136,7 +139,7 @@ def main():
             "Enter your question:",
             height=100,
             placeholder="e.g., What is RAG and how does it work?",
-            key="query_input"
+            key="query_input",
         )
 
         # Submit button
@@ -159,9 +162,7 @@ def main():
 
             try:
                 # Create retriever
-                retriever = vectorstore.as_retriever(
-                    search_kwargs={"k": k}
-                )
+                retriever = vectorstore.as_retriever(search_kwargs={"k": k})
 
                 # Update LLM temperature
                 llm.temperature = temperature
@@ -194,7 +195,9 @@ def main():
                 # Source documents
                 with st.expander("📄 Source Documents", expanded=False):
                     for i, doc in enumerate(docs, 1):
-                        st.markdown(f"**Document {i}** (Source: {doc.metadata.get('source', 'unknown')})")
+                        st.markdown(
+                            f"**Document {i}** (Source: {doc.metadata.get('source', 'unknown')})"
+                        )
                         st.text(doc.page_content[:300] + "...")
                         st.divider()
 
@@ -225,12 +228,12 @@ def main():
         "How do I create a FAISS vector store?",
         "What's the difference between similarity and MMR retrieval?",
         "How does Adaptive RAG routing work?",
-        "What are the cost optimization strategies for RAG?"
+        "What are the cost optimization strategies for RAG?",
     ]
 
     cols = st.columns(len(sample_queries))
     for i, col in enumerate(cols):
-        if col.button(f"📝 Query {i+1}", use_container_width=True):
+        if col.button(f"📝 Query {i + 1}", use_container_width=True):
             st.session_state.query_input = sample_queries[i]
             st.rerun()
 

@@ -4,23 +4,17 @@ Provides functions for loading and splitting documents from various sources.
 """
 
 import datetime
-from typing import List, Optional, Tuple, Dict
-from langchain_core.documents import Document
+
 from langchain_community.document_loaders import WebBaseLoader
+from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from .config import (
-    DEFAULT_CHUNK_SIZE,
-    DEFAULT_CHUNK_OVERLAP,
-    DEFAULT_LANGCHAIN_URLS
-)
+from .config import DEFAULT_CHUNK_OVERLAP, DEFAULT_CHUNK_SIZE, DEFAULT_LANGCHAIN_URLS
 
 
 def load_langchain_docs(
-    urls: Optional[List[str]] = None,
-    add_metadata: bool = True,
-    verbose: bool = True
-) -> List[Document]:
+    urls: list[str] | None = None, add_metadata: bool = True, verbose: bool = True
+) -> list[Document]:
     """
     Load LangChain documentation from web URLs.
 
@@ -56,9 +50,9 @@ def load_langchain_docs(
         if add_metadata:
             current_date = datetime.date.today().isoformat()
             for doc in docs:
-                doc.metadata['source_type'] = 'web_documentation'
-                doc.metadata['process_date'] = current_date
-                doc.metadata['domain'] = 'langchain'
+                doc.metadata["source_type"] = "web_documentation"
+                doc.metadata["process_date"] = current_date
+                doc.metadata["domain"] = "langchain"
 
             if verbose:
                 print("✓ Added custom metadata to all documents")
@@ -72,11 +66,11 @@ def load_langchain_docs(
 
 
 def split_documents(
-    docs: List[Document],
+    docs: list[Document],
     chunk_size: int = DEFAULT_CHUNK_SIZE,
     chunk_overlap: int = DEFAULT_CHUNK_OVERLAP,
-    verbose: bool = True
-) -> List[Document]:
+    verbose: bool = True,
+) -> list[Document]:
     """
     Split documents into smaller chunks for better retrieval.
 
@@ -100,8 +94,7 @@ def split_documents(
 
     try:
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=chunk_size,
-            chunk_overlap=chunk_overlap
+            chunk_size=chunk_size, chunk_overlap=chunk_overlap
         )
 
         chunks = text_splitter.split_documents(docs)
@@ -126,10 +119,8 @@ def split_documents(
 
 
 def compare_splitting_strategies(
-    docs: List[Document],
-    strategies: List[Tuple[int, int]],
-    verbose: bool = True
-) -> Dict:
+    docs: list[Document], strategies: list[tuple[int, int]], verbose: bool = True
+) -> dict:
     """
     Compare different text splitting strategies.
 
@@ -149,10 +140,7 @@ def compare_splitting_strategies(
 
     for chunk_size, chunk_overlap in strategies:
         chunks = split_documents(
-            docs,
-            chunk_size=chunk_size,
-            chunk_overlap=chunk_overlap,
-            verbose=False
+            docs, chunk_size=chunk_size, chunk_overlap=chunk_overlap, verbose=False
         )
 
         strategy_name = f"{chunk_size}/{chunk_overlap}"
@@ -160,7 +148,7 @@ def compare_splitting_strategies(
             "chunk_size": chunk_size,
             "chunk_overlap": chunk_overlap,
             "num_chunks": len(chunks),
-            "chunks": chunks
+            "chunks": chunks,
         }
 
     if verbose:
@@ -169,10 +157,12 @@ def compare_splitting_strategies(
         print("-" * 60)
 
         for strategy_name, result in results.items():
-            print(f"{strategy_name:<15} "
-                  f"{result['chunk_size']:<15} "
-                  f"{result['chunk_overlap']:<15} "
-                  f"{result['num_chunks']:<10}")
+            print(
+                f"{strategy_name:<15} "
+                f"{result['chunk_size']:<15} "
+                f"{result['chunk_overlap']:<15} "
+                f"{result['num_chunks']:<10}"
+            )
 
         print("\n💡 Larger chunks = more context, fewer chunks")
         print("💡 Smaller chunks = more precise, more chunks")
@@ -181,11 +171,11 @@ def compare_splitting_strategies(
 
 
 def load_and_split(
-    urls: Optional[List[str]] = None,
+    urls: list[str] | None = None,
     chunk_size: int = DEFAULT_CHUNK_SIZE,
     chunk_overlap: int = DEFAULT_CHUNK_OVERLAP,
-    verbose: bool = True
-) -> Tuple[List[Document], List[Document]]:
+    verbose: bool = True,
+) -> tuple[list[Document], list[Document]]:
     """
     Convenience function to load and split documents in one call.
 
@@ -204,10 +194,7 @@ def load_and_split(
     """
     docs = load_langchain_docs(urls=urls, verbose=verbose)
     chunks = split_documents(
-        docs,
-        chunk_size=chunk_size,
-        chunk_overlap=chunk_overlap,
-        verbose=verbose
+        docs, chunk_size=chunk_size, chunk_overlap=chunk_overlap, verbose=verbose
     )
 
     return docs, chunks
