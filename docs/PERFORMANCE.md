@@ -282,27 +282,35 @@ print(f"LLM: ${llm_cost:.6f} (per query)")
 
 ### Quality vs Speed Trade-off
 
+The placement below is **illustrative only**: a teaching sketch of typical
+complexity vs latency, **not** a measured quality score, benchmark, or Absolute
+Quality 1-10 rating. No corpus-level evaluation backs a numeric rank.
+
 ```
-Quality (1-10)  |                    * Agentic RAG (9.5, 30s)
-                |                  * Self-RAG (9.0, 15s)
-                |                * GraphRAG (8.8, 6s)
-                |                * CRAG (8.5, 12s)
-                |              * Fusion RAG (8.2, 7s)
-                |            * SQL RAG (8.0*, 4s)
-                |            * HyDe (7.5, 5s)
-                |          * Branched RAG (7.5, 6s)
-                |       * Adaptive RAG (7.0, variable)
-                |       * Contextual RAG (7.2, 2.5s)
-                |     * Memory RAG (6.5, 2.5s)
-                |   * Simple RAG (6.0, 2s)
+Illustrative    |                    * Agentic RAG (~30s)
+ranking         |                  * Self-RAG (~15s)
+(unmeasured)    |                * GraphRAG (~6s)
+                |                * CRAG (~12s)
+                |              * Fusion RAG (~7s)
+                |            * SQL RAG (~4s)*
+                |            * HyDe (~5s)
+                |          * Branched RAG (~6s)
+                |       * Adaptive RAG (variable)
+                |       * Contextual RAG (~2.5s)
+                |     * Memory RAG (~2.5s)
+                |   * Simple RAG (~2s)
                 |_________________________________
                          Latency (seconds)
 ```
 
-**Legend:** *SQL RAG can look strong on structured queries when the generated SQL
-is correct; it is not a guarantee, and it is N/A for unstructured text.
+**Legend:** *SQL RAG is in scope for structured queries when the generated SQL is
+valid and the schema matches; it is not a guarantee, and it is N/A for
+unstructured text.
 
-**Key Insight:** a 1.5x quality improvement costs about 15x latency. The specialized architectures (Contextual, Fusion, SQL, GraphRAG) offer better quality-speed trade-offs for their specific use cases.
+**Key Insight:** more elaborate architectures usually cost more latency.
+Specialized ones (Contextual, Fusion, SQL, GraphRAG) can be a better trade-off
+for their specific use cases. Do not treat the sketch as a measured quality
+ranking.
 
 ## Performance Tips
 

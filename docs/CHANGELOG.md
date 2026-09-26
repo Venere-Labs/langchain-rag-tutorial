@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CHANGELOG "Under Consideration" no longer lists hybrid search and re-ranking
   (shipped in 1.4.0).
 - FAQ no longer claims perfect SQL accuracy or unmeasured percentage gains.
+- Comparison matrix no longer labels SQL RAG accuracy as "Perfect"; PERFORMANCE
+  quality-vs-speed sketch drops unmeasured 1-10 scores.
 
 ## [1.4.0] - 2026-09-21
 
