@@ -327,7 +327,7 @@ Enhances document chunks by prepending them with document-level context, improvi
 - Document summarization with LLM
 - Chunk-specific contextualization
 - Context-augmented embeddings
-- ~15-30% better retrieval quality
+- Can help isolated chunks that lack document context (no measured gain claimed here)
 - Full contextual retrieval (section 11): contextual embeddings + contextual BM25 + reranking, with an ablation of 4 configurations
 
 **Example:**
@@ -600,13 +600,13 @@ Indexed representations:
 | Hybrid + Rerank | Fast (2-4s) | Low | Very Good | 3/5 | Identifiers, jargon |
 | Parent / Multi-Vector | Fast (2-3s) | Low*** | Very Good | 3/5 | Chunk-size trade-offs |
 | Adaptive RAG | Variable | Optimized | Very Good | 4/5 | Mixed workloads |
-| SQL RAG | Fast (2-5s) | Low-Med | Perfect* | 4/5 | Analytics |
+| SQL RAG | Fast (2-5s) | Low-Med | High if SQL valid* | 4/5 | Analytics |
 | CRAG | Slow (10-15s) | High | Excellent | 4/5 | High-accuracy |
 | Self-RAG | Slow (10-20s) | High | Excellent | 5/5 | Quality-critical |
 | GraphRAG | Medium (3-8s) | High | Excellent** | 5/5 | Knowledge graphs |
 | Agentic RAG | Very Slow (20-40s) | Very High | Excellent | 5/5 | Complex reasoning |
 
-*Perfect for structured data queries | **Excellent for relationship queries | ***Multi-vector adds LLM calls at indexing time
+*Suitable for structured queries when the generated SQL is valid and the schema is in scope; the model can still write incorrect or incomplete SQL (no accuracy guarantee) | **Stronger on relationship queries | ***Multi-vector adds LLM calls at indexing time
 
 ---
 

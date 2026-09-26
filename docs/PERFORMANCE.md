@@ -24,8 +24,14 @@ Benchmarks and performance expectations for LangChain RAG Tutorial.
 | 14_sql_rag | 5-8 min | 1.5 min | Chinook DB setup + SQL generation |
 | 15_graphrag | 10-15 min | 3 min | Entity extraction + graph construction |
 | 16_evaluation_ragas | 15-20 min | 5 min | Evaluation dataset + metrics computation |
+| 17_multimodal_rag | 25-30 min | 5-8 min | Vision API calls + optional OCR / PDF image extraction |
+| 18_finetuning_embeddings | 30-35 min | 8-12 min | Local embedding fine-tune + baseline comparison |
+| 19_hybrid_search_reranking | 15-20 min | 3-5 min | Reranker download (~90 MB) + BM25 / hybrid comparison |
+| 20_parent_multivector_retrieval | 15-20 min | 3-5 min | Parent index + LLM summaries / hypothetical questions |
 
-**Key Insight:** First run includes model downloads, vector store creation, and database setup. Subsequent runs use cached data.
+Times for 17-20 are order-of-magnitude estimates from the notebook durations, not
+timed runs. First run includes model downloads, vector store creation, and
+database setup. Subsequent runs use cached data.
 
 ## Query Latency
 
@@ -145,7 +151,7 @@ embeddings = OpenAIEmbeddings(model=OPENAI_EMBEDDING_MODEL)
 vectorstore = FAISS.from_documents(chunks, embeddings)
 save_vector_store(vectorstore, OPENAI_VECTOR_STORE_PATH)
 
-# Reuse everywhere (notebooks 03-18)
+# Reuse everywhere (notebooks 03-20)
 vectorstore = require_vector_store(OPENAI_VECTOR_STORE_PATH, embeddings)
 ```
 
@@ -276,26 +282,35 @@ print(f"LLM: ${llm_cost:.6f} (per query)")
 
 ### Quality vs Speed Trade-off
 
+The placement below is **illustrative only**: a teaching sketch of typical
+complexity vs latency, **not** a measured quality score, benchmark, or Absolute
+Quality 1-10 rating. No corpus-level evaluation backs a numeric rank.
+
 ```
-Quality (1-10)  |                    * Agentic RAG (9.5, 30s)
-                |                  * Self-RAG (9.0, 15s)
-                |                * GraphRAG (8.8, 6s)
-                |                * CRAG (8.5, 12s)
-                |              * Fusion RAG (8.2, 7s)
-                |            * SQL RAG (8.0*, 4s)
-                |            * HyDe (7.5, 5s)
-                |          * Branched RAG (7.5, 6s)
-                |       * Adaptive RAG (7.0, variable)
-                |       * Contextual RAG (7.2, 2.5s)
-                |     * Memory RAG (6.5, 2.5s)
-                |   * Simple RAG (6.0, 2s)
+Illustrative    |                    * Agentic RAG (~30s)
+ranking         |                  * Self-RAG (~15s)
+(unmeasured)    |                * GraphRAG (~6s)
+                |                * CRAG (~12s)
+                |              * Fusion RAG (~7s)
+                |            * SQL RAG (~4s)*
+                |            * HyDe (~5s)
+                |          * Branched RAG (~6s)
+                |       * Adaptive RAG (variable)
+                |       * Contextual RAG (~2.5s)
+                |     * Memory RAG (~2.5s)
+                |   * Simple RAG (~2s)
                 |_________________________________
                          Latency (seconds)
 ```
 
-**Legend:** *SQL RAG quality is "Perfect" for structured data queries, "N/A" for unstructured
+**Legend:** *SQL RAG is in scope for structured queries when the generated SQL is
+valid and the schema matches; it is not a guarantee, and it is N/A for
+unstructured text.
 
-**Key Insight:** a 1.5x quality improvement costs about 15x latency. The specialized architectures (Contextual, Fusion, SQL, GraphRAG) offer better quality-speed trade-offs for their specific use cases.
+**Key Insight:** more elaborate architectures usually cost more latency.
+Specialized ones (Contextual, Fusion, SQL, GraphRAG) can be a better trade-off
+for their specific use cases. Do not treat the sketch as a measured quality
+ranking.
 
 ## Performance Tips
 
